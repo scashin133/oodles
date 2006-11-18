@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+
 /*
  * Creator : Sam Archer
  * Nov 17, 2006
@@ -7,12 +9,15 @@ import java.util.ArrayList;
 
 public class View {
 	String myName;
-	String myIcon;
+	ImageIcon myIcon;
 	
+	// Actions are stored here as an ArrayList because they never
+	// need to be looked up specifically.
 	ArrayList<Action> myActions = new ArrayList<Action>();
 	
-	public View(String viewName){
+	public View(String viewName, ImageIcon viewIcon){
 		myName = viewName;
+		myIcon = viewIcon;
 	}
 	
 	public void addAction(Action newAction){
@@ -23,7 +28,7 @@ public class View {
 		return myName;
 	}
 	
-	public String icon(){
+	public ImageIcon icon(){
 		return myIcon;
 	}
 	

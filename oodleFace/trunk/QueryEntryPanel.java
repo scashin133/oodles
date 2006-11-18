@@ -9,9 +9,12 @@ import javax.swing.JTextField;
  * Nov 17, 2006
  */
 
+// TODO This is basically just a place holder Panel for QueryEntries
+
+
 public class QueryEntryPanel extends JPanel implements ActionVisualization {
 	
-	JTextField queryField = new JTextField("Enter Querey Here");
+	JTextField queryField = new JTextField("Enter Query Here");
 	public QueryEntryPanel(){
 		super();
 		this.initialize();

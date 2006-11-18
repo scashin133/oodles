@@ -1,10 +1,9 @@
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,6 +14,9 @@ import javax.swing.border.EtchedBorder;
  * Creator : Sam Archer
  * Nov 17, 2006
  */
+
+// TODO I'll comment this one later, for now look at ActionPanel (it's pretty
+// much the same)
 
 public class ViewPanel extends JPanel implements ActionListener{
 	
@@ -37,6 +39,7 @@ public class ViewPanel extends JPanel implements ActionListener{
 		//Create and add panel title label
 		JLabel viewPanelTitle = new JLabel("ViewPanel");
 		viewPanelToolBar.add(viewPanelTitle);
+		viewPanelToolBar.setLayout(new BoxLayout(viewPanelToolBar, BoxLayout.Y_AXIS));
 		
 		//Set Layout
 		this.setLayout(new BorderLayout());
@@ -52,7 +55,8 @@ public class ViewPanel extends JPanel implements ActionListener{
 	
 	public void addView(View newView){
 		viewHash.put(newView.name(), newView);
-		JButton newViewButton = new JButton(newView.name());
+		JButton newViewButton = new JButton(newView.icon());
+		newViewButton.setText(newView.name());
 		newViewButton.addActionListener(this);
 		viewPanelToolBar.add(newViewButton);
 	}

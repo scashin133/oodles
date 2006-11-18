@@ -8,7 +8,8 @@ import javax.swing.JPanel;
 
 public class MainPanel extends JPanel {
 
-	ViewPanel myViewPanel;
+	// The View panel contained within the MainPanel
+	ViewPanel myViewPanel= new ViewPanel();
 	
 	public MainPanel(){
 		super();
@@ -16,11 +17,15 @@ public class MainPanel extends JPanel {
 	}
 	
 	private void initialize(){
-		myViewPanel = new ViewPanel();
 		
+		// TODO The design documents have a toolbar with
+		// actions for New/Load/Save.  I thought the
+		// menu bar would work nicely for this but a toolbar
+		// could be added later.
 		
 		//Set up layout
 		this.setLayout(new BorderLayout());
+		//Add ViewPanel
 		this.add(myViewPanel, BorderLayout.CENTER);
 	}
 	

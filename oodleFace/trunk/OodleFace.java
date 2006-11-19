@@ -60,6 +60,10 @@ public class OodleFace {
 		mainPanel.getChild().addView(tableView);
 		mainPanel.getChild().addView(queryView);
 		
+		// Create and add SQL Execution Listener with new SQL
+		// Executor
+		mainPanel.getChild().getChild().getChild().addSQLExecutionListener(new SQLExecutionListener(new SQLExecutor()));
+		
 		// Vizibleize the main window.
 		mainWindow.setVisible(true);
 

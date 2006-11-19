@@ -6,9 +6,9 @@ import javax.swing.JPanel;
  */
 public class Action {
 	String myDescription = "";
-	JPanel myPanel;
+	ActionVisualization myPanel;
 	
-	public Action(String description, JPanel actionPanel){
+	public Action(String description, ActionVisualization actionPanel){
 		myDescription = description;
 		myPanel = actionPanel;
 	}
@@ -19,7 +19,7 @@ public class Action {
 	// TODO This SHOULD return an Object that implements ActionVisualization
 	// but I had trouble with it not being recognized as a JPanel further down
 	// the line
-	public JPanel getPanel(){
+	public ActionVisualization getPanel(){
 		return myPanel;
 	}
 }

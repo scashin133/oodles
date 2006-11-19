@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -14,6 +15,12 @@ import javax.swing.JTextField;
 public class TableEditPanel extends JPanel implements ActionVisualization {
 	
 	JTextField queryField = new JTextField("Table Table");
+	
+	// The executeButton is the button that will tell the
+	// DataPanel that this action has a completed User SQL 
+	// request that needs to be processed.
+	JButton executeButton;
+	
 	public TableEditPanel(){
 		super();
 		this.initialize();
@@ -22,6 +29,8 @@ public class TableEditPanel extends JPanel implements ActionVisualization {
 	private void initialize(){
 		this.add(new JTextArea("Editing Table"));
 		this.add(queryField);
+		executeButton = new JButton("Execute");
+		executeButton.setActionCommand("execute");
 	}
 	
 	public boolean launch(){
@@ -30,6 +39,10 @@ public class TableEditPanel extends JPanel implements ActionVisualization {
 	
 	public ArrayList<String> getResult(){
 		return new ArrayList<String>();
+	}
+
+	public JButton getExecuteButton() {
+		return executeButton;
 	}
 	
 }

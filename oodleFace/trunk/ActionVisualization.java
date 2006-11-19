@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import javax.swing.JButton;
 
 /*
  * Creator : Sam Archer
@@ -15,4 +16,8 @@ public interface ActionVisualization {
 	// doesn't seem to serve a purpose.
 	public boolean launch();
 	public ArrayList<String> getResult();
+	
+	// This method was added so that DataPanel knows
+	// which button to listen for.
+	public JButton getExecuteButton();
 }

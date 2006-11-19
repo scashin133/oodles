@@ -1,7 +1,8 @@
 import java.util.ArrayList;
 
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /*
@@ -14,19 +15,33 @@ import javax.swing.JTextField;
 
 public class QueryEntryPanel extends JPanel implements ActionVisualization {
 	
-	JTextField queryField = new JTextField("Enter Query Here");
+	// The execute button is the button that will tell DataPanel
+	// the user has finished entering data, and there's a result
+	// to get from the Panel.
+	JButton executeButton;
+	
+	JTextField queryField = new JTextField(45);
 	public QueryEntryPanel(){
 		super();
 		this.initialize();
 	}
 	
 	private void initialize(){
-		this.add(new JTextArea("Enter SQL Query"));
+		this.add(new JLabel("Enter SQL Query"));
 		this.add(queryField);
+		
+		
+		executeButton = new JButton("Execute");
+		executeButton.setActionCommand("execute");
+		this.add(executeButton);
 	}
 	
 	public boolean launch(){
 		return true;
+	}
+	
+	public JButton getExecuteButton(){
+		return executeButton;
 	}
 	
 	public ArrayList<String> getResult(){

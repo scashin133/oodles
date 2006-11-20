@@ -17,6 +17,8 @@ public class OodleFace {
 	// -ActionViz display their own results/ have execute button
 	// -Wizards will also display their own results (launch() is no longer
 	// nessesary
+	// -Wizard Managers no long extend Wizard, but instead contain a Wizard
+	// due to how Wizards need to be constructed
 	
 	
 

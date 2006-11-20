@@ -1,8 +1,11 @@
+import java.awt.Dimension;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 /*
@@ -27,7 +30,11 @@ public class QueryEntryPanel extends JPanel implements ActionVisualization {
 	}
 	
 	private void initialize(){
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(new JLabel("Enter SQL Query"));
+		
+		queryField.setMaximumSize(new Dimension(800, 14));
+		queryField.setAlignmentX(javax.swing.JComponent.CENTER_ALIGNMENT);
 		this.add(queryField);
 		
 		
@@ -48,6 +55,19 @@ public class QueryEntryPanel extends JPanel implements ActionVisualization {
 		ArrayList<String> returnValue = new ArrayList<String>();
 		returnValue.add(queryField.getText());
 		return returnValue;
+	}
+
+	public void executionResult(JTable resultTable) {
+		// The table will be the 4th component, if an older table
+		// exists there, remove it.
+		if (this.getComponentCount() == 4){
+			this.remove(3);
+		}
+		this.add(resultTable, 3);
+		
+		this.revalidate();
+		this.repaint();
+		System.out.println("QueryEntryPanelGotTable!");
 	}
 	
 }

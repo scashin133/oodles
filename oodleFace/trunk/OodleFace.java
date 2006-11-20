@@ -13,6 +13,12 @@ import javax.swing.SwingUtilities;
 
 public class OodleFace {
 
+	// Changes
+	// -ActionViz display their own results/ have execute button
+	// -Wizards will also display their own results (launch() is no longer
+	// nessesary
+	
+	
 
 	// I basically copied this out of the tutorial, something about
 	// thread safe.  I don't entirely understand it, but it works fine.
@@ -44,21 +50,25 @@ public class OodleFace {
 		mainWindow.setContentPane(mainPanel);
 		
 		// Create actions
-		Action action1 = new Action("Query Entry", new QueryEntryPanel());
-		Action action2 = new Action("Table Editor", new TableEditPanel());
+		Action manualQuery = new Action("Manual Query Entry", new QueryEntryPanel());
+		Action tableEdit = new Action("Table Editor", new TableEditPanel());
+		Action wizardQuery = new Action("Query Wizard", new QueryEntryWizardManager());
+		Action wizardTable = new Action("Table Wizard", new TableModificationWizardManager());
 		
 		// Create Views and addActions to them
-		View tableView = new View("Table", new ImageIcon("images/table.png"));
-		tableView.addAction(action1);
-		tableView.addAction(action2);
+		View queryView = new View("Query", new ImageIcon("images/query.png"));
+		queryView.addAction(manualQuery);
+		queryView.addAction(wizardQuery);
 		
-		View queryView = new View("Query", new ImageIcon("images/table.png"));
-		queryView.addAction(action2);
-		queryView.addAction(action1);
+		View tableView = new View("Table", new ImageIcon("images/table.png"));
+		tableView.addAction(tableEdit);
+		tableView.addAction(wizardTable);
+		tableView.addAction(manualQuery);
+		
 		
 		// Add views to ViewPanel (child of MainPanel)
-		mainPanel.getChild().addView(tableView);
 		mainPanel.getChild().addView(queryView);
+		mainPanel.getChild().addView(tableView);
 		
 		// Create and add SQL Execution Listener with new SQL
 		// Executor

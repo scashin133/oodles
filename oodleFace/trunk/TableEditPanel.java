@@ -2,6 +2,7 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -43,6 +44,11 @@ public class TableEditPanel extends JPanel implements ActionVisualization {
 
 	public JButton getExecuteButton() {
 		return executeButton;
+	}
+
+	public void executionResult(JTable resultTable) {
+		System.out.println("TableEditPanel Got Table!!");
+		
 	}
 	
 }

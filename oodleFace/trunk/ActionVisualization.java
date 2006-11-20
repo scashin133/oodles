@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import javax.swing.JButton;
+import javax.swing.JTable;
 
 /*
  * Creator : Sam Archer
@@ -20,4 +21,9 @@ public interface ActionVisualization {
 	// This method was added so that DataPanel knows
 	// which button to listen for.
 	public JButton getExecuteButton();
+	
+	// This method was added so DataPanel doesn't need to 
+	// determine the correct method to send data back to
+	// (more options for adding actions in the future.
+	public void executionResult(JTable resultTable);
 }

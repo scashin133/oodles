@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.border.EtchedBorder;
@@ -52,24 +53,15 @@ public class DataPanel extends JPanel implements ActionListener{
 		// panel and don't have to be explicitly unActionListener'd
 		actionVisualizationPanel.getExecuteButton().addActionListener(this);
 	}
-	
-	protected void displayActionResult(JTable actionResultTable){
-		this.add(actionResultTable, BorderLayout.SOUTH);
-		
-		// Because my table so far is empty/blank/nonexistant
-		// this line shows that at least the methods between the execute
-		// button and the SQLExecutor worked both directions.
-		System.out.println("Table Received!!");
-		this.revalidate();
-		this.repaint();
-	}
 
 	public void actionPerformed(ActionEvent a) {
 		
 		// If the execute button has been pressed, send the
 		// result of the actionPanel to the ExecutionListener
 		if (a.getActionCommand().equals("execute")){
-			displayActionResult(executionListener.executeSQL(actionVisualizationPanel.getResult(), "TableName"));
+			// If the execute button was pressed, give the executionResult
+			// back to the Panel
+			actionVisualizationPanel.executionResult(executionListener.executeSQL(actionVisualizationPanel.getResult(), "TableName"));
 		}
 		
 	}

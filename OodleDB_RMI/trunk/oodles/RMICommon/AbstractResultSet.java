@@ -20,14 +20,12 @@ import java.util.Calendar;
 import java.util.Map;
 
 /**
- * This class represents the result returned from SQL operation.
- * 
- * Obviously, we're not going to even try to implement most of these methods --
+ * This class serves as a starting point for implementing a ResultSet
  * 
  * @author mitch
  *
  */
-public class ResultSet implements java.sql.ResultSet, ResultSetMetaData, Serializable {
+public abstract class AbstractResultSet implements java.sql.ResultSet, ResultSetMetaData, Serializable {
 	
 	/**
 	 * 

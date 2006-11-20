@@ -3,6 +3,7 @@
 	<name>oodleFace</name>
 	<comment></comment>
 	<projects>
+		<project>oodleDBC</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -3,5 +3,7 @@
 	<classpathentry excluding="lib/" kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/wizard-0.1.12.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OodleDB_RMI"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/oodleDBC"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

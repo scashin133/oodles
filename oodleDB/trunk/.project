@@ -3,6 +3,7 @@
 	<name>oodleDB</name>
 	<comment></comment>
 	<projects>
+		<project>OodleDB_RMI</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

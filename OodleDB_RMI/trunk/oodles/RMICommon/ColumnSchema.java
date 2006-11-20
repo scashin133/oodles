@@ -1,6 +1,8 @@
 package oodles.RMICommon;
 
-public interface ColumnSchema {
+import java.rmi.Remote;
+
+public interface ColumnSchema extends Remote {
 
 	public String getColumnName();
 	

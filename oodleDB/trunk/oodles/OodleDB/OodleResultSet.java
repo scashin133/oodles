@@ -1,4 +1,4 @@
-package oodles.RMICommon;
+package oodles.OodleDB;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -20,12 +20,15 @@ import java.util.Calendar;
 import java.util.Map;
 
 /**
- * This class serves as a starting point for implementing a ResultSet
+ * This class serves as a starting point for implementing a ResultSet.
+ * 
+ * This class must be serializable because it is going to be passed across the RMI
+ * layer
  * 
  * @author mitch
  *
  */
-public abstract class AbstractResultSet implements java.sql.ResultSet, ResultSetMetaData, Serializable {
+public abstract class OodleResultSet implements java.sql.ResultSet, ResultSetMetaData, Serializable {
 	
 	/**
 	 * 
@@ -264,9 +267,11 @@ public abstract class AbstractResultSet implements java.sql.ResultSet, ResultSet
 		
 	}
 
+	/**
+	 * Returns the metadata for this result set ... in this case, this object.
+	 */
 	public ResultSetMetaData getMetaData() throws SQLException {
-		throw new UnsupportedOperationException("Our shit is weak");
-		
+		return this;
 	}
 
 	public Object getObject(int arg0) throws SQLException {

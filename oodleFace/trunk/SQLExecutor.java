@@ -1,3 +1,5 @@
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.border.EtchedBorder;
@@ -5,6 +7,8 @@ import javax.swing.border.EtchedBorder;
 
 public class SQLExecutor {
 
+	TableBuilder myTableBuilder = new TableBuilder(new TableSchemaCache());
+	
 	public SQLExecutor(){
 		
 	}
@@ -23,10 +27,9 @@ public class SQLExecutor {
 		// TODO This needs to actually go execute SQL commands
 		// Waiting on a stub or hopefully the JDBC component
 		
-		// TODO This needs to actually make a table from the 
-		// returned results
-		
-		//JTable returnTable = new JTable();
+		//ResultSet resultSet;
+		//JTable returnTable = myTableBuilder.buildTable(resultSet, "NEEDTOGETNAME");
+
 		returnTable.setBorder(new EtchedBorder());
 		returnTable.setSize(100, 100);
 		return returnTable;

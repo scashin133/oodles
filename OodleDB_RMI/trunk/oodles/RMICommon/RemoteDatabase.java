@@ -1,17 +1,14 @@
 package oodles.RMICommon;
 
+import java.rmi.Remote;
 import java.sql.*;
-import java.util.ArrayList;
-
-import javax.sql.*;
+import java.util.Collection;
 
 
 /**
-* API used for the RMI framework which allows for remote method calls on a Database.
-*
-*/
-
-public interface RemoteDatabase {
+ * Provides an interface for interacting with a database over RMI.
+ */
+public interface RemoteDatabase extends Remote {
 
 	/**
 
@@ -26,7 +23,7 @@ public interface RemoteDatabase {
 	* @see ConditionList
 	*
 	*/
-	public ResultSet select(String tableName, ArrayList<String> namesOfSelectedColumns, String whereClause);
+	public ResultSet select(String tableName, Collection<String> columns, String whereClause) throws SQLException;
 
 	/**
 	* Maps to the CREATE TABLE SQL Statement.  Must be at least one ColumnSchema given.  The tablename given may NOT be one already in existence,
@@ -38,8 +35,7 @@ public interface RemoteDatabase {
 	* @see ColumnSchema
 	*
 	*/
-
-	public int createTable(String tableName, ArrayList<ColumnSchema> schemaForColumns);
+	public int createTable(String tableName, Collection<ColumnSchema> columns) throws SQLException;
 
 	/**
 	* Maps to the ALTER TABLE SQL Statement.  Used for when altering the schema of a table.
@@ -51,7 +47,7 @@ public interface RemoteDatabase {
 	* @see ColumnSchema
 	*
 	*/
-	public int alter(String tableName, ColumnSchema columnSchemaToBeAdded);
+	public int alterTable(String tableName, ColumnSchema columnSchemaToBeAdded) throws SQLException;
 
 	/**
 	* Maps to the UPDATE SQL Statement.  The tablename must be a table in the database.  Will update all rows that are approved by the ConditionList.
@@ -66,7 +62,7 @@ public interface RemoteDatabase {
 	* @see ConditionList
 	*
 	*/
-	public int update(String tableName, ArrayList<String> columnNames, ArrayList<String> newValues, String whereClause);
+	public int update(String tableName, Collection<String> columnNames, Collection<String> newValues, String whereClause) throws SQLException;
 
 	/**
 	* Maps to the INSERT INTO SQL Statement.  The tablename must be a table in the database.  If the list of columnNames is null then the
@@ -81,7 +77,7 @@ public interface RemoteDatabase {
 	* @see Datum
 	*
 	*/
-	public int insert(String tableName, ArrayList<String> columnNames, ArrayList<String> values);
+	public int insert(String tableName, Collection<String> columnNames, Collection<String> values) throws SQLException;
 
 
 	/**
@@ -93,7 +89,7 @@ public interface RemoteDatabase {
 	* @see ConditionList
 	*
 	*/
-	public int delete(String tableName, String whereClause);
+	public int delete(String tableName, String whereClause) throws SQLException;
 
 	/**
 	* Maps to the TRUNCATE SQL Statement or the SQL Statement DELETE * FROM <tablename>.  The name of the table must exist in the database.
@@ -102,7 +98,7 @@ public interface RemoteDatabase {
 	* @return number of rows that have been changed by this command or throws SQLException if error
 	*
 	*/
-	public int deleteAllDataFromTable(String tableName);
+	public int deleteAllFromTable(String tableName) throws SQLException;
 
 
 	/**
@@ -111,7 +107,32 @@ public interface RemoteDatabase {
 	* @param tablename name of the table that is wanting to be deleted.  All information about table deleted.
 	* @return 0 because deleting whole table or throws SQLException if error
 	*/
-	public int dropTable(String tableName);
-
+	public int dropTable(String tableName) throws SQLException;
+	
+	
+	/**
+	 * Maps to the DESCRIBE [table] SQL command. Returns result set containing table schema information:
+	 * 
+	 * Columns Returned:
+	 * - Field: The name of the field
+	 * - Type: The type of the field
+	 * - Key: Whether or not this column is the primary key
+	 * 
+	 * @param tableName The name of the table to destribe
+	 * @throws SQLException as usual.
+	 */
+	public ResultSet describeTable(String tableName) throws SQLException;
+	
+	
+	/**
+	 * Maps to the SHOW TABLES SQL command. Returns a resultset listing the names of all the tables within the database.
+	 * 
+	 * Columns Returned:
+	 * - Table: The name of the table
+	 * 
+	 * @thows SQLException
+	 */
+	public ResultSet showTables() throws SQLException;
+	
 
 }

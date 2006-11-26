@@ -1,5 +1,8 @@
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.border.EtchedBorder;
@@ -13,7 +16,7 @@ public class SQLExecutor {
 		
 	}
 	
-	public JTable executeSQL(ArrayList<String> commands){
+	public JTable executeSQL(ArrayList<String> commands) throws SQLException{
 		
 		JTable returnTable = new JTable(2,2);
 		
@@ -26,6 +29,7 @@ public class SQLExecutor {
 		
 		// TODO This needs to actually go execute SQL commands
 		// Waiting on a stub or hopefully the JDBC component
+		
 		
 		//ResultSet resultSet;
 		//JTable returnTable = myTableBuilder.buildTable(resultSet, "NEEDTOGETNAME");

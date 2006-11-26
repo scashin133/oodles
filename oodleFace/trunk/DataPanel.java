@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -13,27 +14,27 @@ import javax.swing.border.EtchedBorder;
  */
 
 public class DataPanel extends JPanel implements ActionListener{
-	
+
 	SQLExecutionListener executionListener;
 	ActionVisualization actionVisualizationPanel;
-	
+
 	public DataPanel(){
 		super();
-		
+
 		this.initialize();
 	}
-	
+
 	public void addSQLExecutionListener(SQLExecutionListener sqlel){
 		executionListener = sqlel;
 	}
-	
+
 	private void initialize(){
 		//Set Border
 		this.setBorder(new EtchedBorder());
 		//Set Layout
 		this.setLayout(new BorderLayout());
 	}
-	
+
 	//This is called by the ActionPanel when an action is selected.
 	public void showActionContent(Action targetAction){
 		//Remove any components in the DataPanel
@@ -47,7 +48,7 @@ public class DataPanel extends JPanel implements ActionListener{
 		// feel free to change it.
 		this.revalidate();
 		this.repaint();
-		
+
 		// TODO I THINK/HOPE that old buttons will still get
 		// garbage collected when they are removed from this
 		// panel and don't have to be explicitly unActionListener'd
@@ -55,15 +56,20 @@ public class DataPanel extends JPanel implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent a) {
-		
+
 		// If the execute button has been pressed, send the
 		// result of the actionPanel to the ExecutionListener
 		if (a.getActionCommand().equals("execute")){
 			// If the execute button was pressed, give the executionResult
 			// back to the Panel
-			actionVisualizationPanel.executionResult(executionListener.executeSQL(actionVisualizationPanel.getResult(), "TableName"));
+			try {
+				actionVisualizationPanel.executionResult(executionListener.executeSQL(actionVisualizationPanel.getResult(), "TableName"));
+			}
+			catch (SQLException e){
+				System.out.println(e.getMessage());
+			}
 		}
-		
+
 	}
 
 }

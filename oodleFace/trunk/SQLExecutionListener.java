@@ -1,3 +1,4 @@
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JTable;
 
@@ -13,7 +14,7 @@ public class SQLExecutionListener {
 		executor = sqle;
 	}
 	
-	public JTable executeSQL(ArrayList<String> commands, String tableName){
+	public JTable executeSQL(ArrayList<String> commands, String tableName) throws SQLException{
 		return executor.executeSQL(commands);
 	}
 	

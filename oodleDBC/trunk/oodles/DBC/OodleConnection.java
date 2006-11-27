@@ -10,9 +10,11 @@ import java.sql.Savepoint;
 import java.sql.Statement;
 import java.util.Map;
 
+import oodles.RMICommon.RemoteDatabase;
+
 public class OodleConnection implements Connection {
 	
-	private Database database;
+	private RemoteDatabase database;
 
 	public void clearWarnings() throws SQLException {
 		// TODO Auto-generated method stub

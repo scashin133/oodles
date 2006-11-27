@@ -9,9 +9,11 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import oodles.RMICommon.RemoteDatabaseServer;
+
 public class OodleDataSource implements DataSource {
 	
-	private DatabaseServer databaseServer;
+	private RemoteDatabaseServer databaseServer;
 
 	public Connection getConnection() throws SQLException {
 		

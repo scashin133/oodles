@@ -14,6 +14,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import org.pietschy.wizard.PanelWizardStep;
 import org.pietschy.wizard.Wizard;
+import org.pietschy.wizard.WizardListener;
 import org.pietschy.wizard.models.StaticModel;
 
 
@@ -80,7 +81,7 @@ public class QueryEntryWizardManager extends JPanel implements ActionVisualizati
 		filterSelect.add(skipButton);
 		
 		myModel.add(filterSelect);
-		
+		myWizard.addWizardListener(this);
 		myWizard = new Wizard(myModel);
 		this.add(myWizard);
 	}

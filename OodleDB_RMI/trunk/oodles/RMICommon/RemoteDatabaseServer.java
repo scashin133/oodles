@@ -1,6 +1,7 @@
 package oodles.RMICommon;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -18,8 +19,9 @@ public interface RemoteDatabaseServer extends Remote {
 	 * - Database: the name of the database
 	 * 
 	 * @throws SQLException if a SQL error occurs.
+	 * @throws RemoteException to make RMI happy
 	 */
-	public ResultSet showDatabases() throws SQLException;
+	public ResultSet showDatabases() throws SQLException, RemoteException;
 	
 	
 	/**
@@ -30,8 +32,9 @@ public interface RemoteDatabaseServer extends Remote {
 	* @return 0 because no rows have been updated
 	*  
 	* @throws SQLException if a SQL error occurs.
+	* @throws RemoteException to make RMI happy
 	*/
-	public int createDatabase(String databaseName) throws SQLException;
+	public int createDatabase(String databaseName) throws SQLException, RemoteException;
 
 	/**
 	* Maps to the DROP DATABASE SQL Statement.  Will remove all trace of database i.e. tables, schema, data, database itself.
@@ -40,7 +43,8 @@ public interface RemoteDatabaseServer extends Remote {
 	* @return 0 because deleting whole database or throws SQLException if error
 	* 
 	* @throws SQLException if a SQL error occurs.
+	* @throws RemoteException to make RMI happy
 	*/
-	public int dropDatabase(String databaseName) throws SQLException;
+	public int dropDatabase(String databaseName) throws SQLException, RemoteException;
 
 }

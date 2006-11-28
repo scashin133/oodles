@@ -23,7 +23,7 @@ public class TableEditPanel extends JPanel implements ActionVisualization, Actio
 	// The executeButton is the button that will tell the
 	// DataPanel that this action has a completed User SQL 
 	// request that needs to be processed.
-	JButton executeButton;
+	JButton executeButton = new JButton("Execute");
 	
 	public TableEditPanel(){
 		super();
@@ -35,7 +35,10 @@ public class TableEditPanel extends JPanel implements ActionVisualization, Actio
 		goButton.setActionCommand("go");
 		goButton.addActionListener(this);
 		this.add(goButton);
-		executeButton = new JButton("Execute");
+	}
+	
+	private void displayTable(){
+		this.add(editableTable);
 		executeButton.setActionCommand("execute");
 	}
 	
@@ -58,7 +61,8 @@ public class TableEditPanel extends JPanel implements ActionVisualization, Actio
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "go"){
-			
+			this.removeAll();
+			this.displayTable();
 		}
 		
 	}

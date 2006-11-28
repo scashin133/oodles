@@ -1,5 +1,10 @@
 package oodles.RMICommon;
 
+/**
+ * Stores the name and datatype of a column
+ * 
+ * @author mitch
+ */
 public class ColumnSchema {
 	
 	protected String name;

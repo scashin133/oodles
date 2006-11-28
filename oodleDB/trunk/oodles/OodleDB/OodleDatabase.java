@@ -14,7 +14,7 @@ import oodles.RMICommon.RemoteDatabase;
 public class OodleDatabase implements RemoteDatabase{
 
 	private String name;
-	private HashMap<String, OodleTable> tableCollection;
+	private HashMap<String, DatabaseTable> tableCollection;
 	
 	public OodleDatabase(String name){
 		name = this.name;

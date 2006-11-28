@@ -8,23 +8,21 @@ import java.util.ArrayList;
  * @author Mike Wadhera and Sam Chang
  *
  */
-public class OodleColumn {
+
+public class ColumnSchema {
 	private String name;
-	private ArrayList<String> data;
+	private String type;
 	
-	public OodleColumn(){
-		
+	public ColumnSchema(String name)
+	{
+		name = this.name;
 	}
 	
 	public String getName(){
 		return name;
 	}
 	
-	public String getData(int rowIndex){
-		return "";
-	}
-	
-	public void setData(int rowIndex){
-		
+	public String getType(){
+		return type;
 	}
 }

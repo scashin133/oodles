@@ -9,12 +9,12 @@ import java.util.ArrayList;
  * @author Mike Wadhera and Sam Chang
  *
  */
-public class OodleTable {
+public class DatabaseTable {
 	private String name;
-	private OodleTableSchema schema;
+	private TableSchema schema;
 	private ArrayList<OodleRow> rows;
 	
-	public OodleTable(){
+	public DatabaseTable(){
 		
 	}
 	

@@ -63,7 +63,11 @@ public class SQLExecutor {
 					stmt.executeUpdate( command );
 				}
 			}
-		} finally {
+		} 
+		catch (Exception e){
+			System.out.println("Exception in SQL Executor, assumed to\n be fault of DBC");
+		}
+		finally {
 			stmt.close();
 		}
 

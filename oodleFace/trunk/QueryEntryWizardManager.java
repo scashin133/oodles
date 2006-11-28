@@ -81,7 +81,6 @@ public class QueryEntryWizardManager extends JPanel implements ActionVisualizati
 		filterSelect.add(skipButton);
 		
 		myModel.add(filterSelect);
-		myWizard.addWizardListener(this);
 		myWizard = new Wizard(myModel);
 		this.add(myWizard);
 	}

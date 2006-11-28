@@ -40,6 +40,9 @@ public class TableEditPanel extends JPanel implements ActionVisualization, Actio
 	private void displayTable(){
 		this.add(editableTable);
 		executeButton.setActionCommand("execute");
+		this.add(executeButton);
+		this.revalidate();
+		this.repaint();
 	}
 	
 	public boolean launch(){
@@ -47,7 +50,7 @@ public class TableEditPanel extends JPanel implements ActionVisualization, Actio
 	}
 	
 	public ArrayList<String> getResult(){
-		return new ArrayList<String>();
+		return TableEditorSQLCreator.produceSQLToStoreEdit(new JTable(), editableTable);
 	}
 
 	public JButton getExecuteButton() {

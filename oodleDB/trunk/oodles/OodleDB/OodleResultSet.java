@@ -72,6 +72,8 @@ public abstract class OodleResultSet implements java.sql.ResultSet, ResultSetMet
 		
 	}
 
+	
+	// Implement
 	public boolean first() throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
 		
@@ -270,6 +272,7 @@ public abstract class OodleResultSet implements java.sql.ResultSet, ResultSetMet
 	/**
 	 * Returns the metadata for this result set ... in this case, this object.
 	 */
+	//	 Implement
 	public ResultSetMetaData getMetaData() throws SQLException {
 		return this;
 	}
@@ -305,6 +308,7 @@ public abstract class OodleResultSet implements java.sql.ResultSet, ResultSetMet
 		
 	}
 
+
 	public int getRow() throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
 		
@@ -325,10 +329,14 @@ public abstract class OodleResultSet implements java.sql.ResultSet, ResultSetMet
 		
 	}
 
+	//	 Implement
+
 	public String getString(int arg0) throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
 		
 	}
+
+	//	 Implement
 
 	public String getString(String arg0) throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
@@ -410,27 +418,32 @@ public abstract class OodleResultSet implements java.sql.ResultSet, ResultSetMet
 		throw new UnsupportedOperationException("Our shit is weak");
 
 	}
+	//	 Implement
 
 	public boolean isAfterLast() throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
 		
 	}
 
+	//	 Implement
 	public boolean isBeforeFirst() throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
 		
 	}
 
+	//	 Implement
 	public boolean isFirst() throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
 		
 	}
 
+	//	 Implement
 	public boolean isLast() throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
 		
 	}
 
+	//	 Implement
 	public boolean last() throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
 		
@@ -441,16 +454,19 @@ public abstract class OodleResultSet implements java.sql.ResultSet, ResultSetMet
 
 	}
 
+	//	 Implement
 	public void moveToInsertRow() throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
 
 	}
 
+	//	 Implement
 	public boolean next() throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
 		
 	}
 
+	//	 Implement
 	public boolean previous() throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
 		
@@ -762,15 +778,17 @@ public abstract class OodleResultSet implements java.sql.ResultSet, ResultSetMet
 	public String getColumnLabel(int arg0) throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
 	}
+	//	 Implement
 
 	public String getColumnName(int arg0) throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
 	}
-
+	//	 Implement - Should always return string
 	public int getColumnType(int arg0) throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
 	}
 
+	//	 Implement - Should always return string
 	public String getColumnTypeName(int arg0) throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
 	}
@@ -787,6 +805,7 @@ public abstract class OodleResultSet implements java.sql.ResultSet, ResultSetMet
 		throw new UnsupportedOperationException("Our shit is weak");
 	}
 
+	//	 Implement - Should always return string
 	public String getTableName(int arg0) throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
 	}

@@ -1,3 +1,5 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -13,10 +15,11 @@ import javax.swing.JTextField;
 
 //TODO This is basically just a place holder Panel for TableEditing
 
-public class TableEditPanel extends JPanel implements ActionVisualization {
+public class TableEditPanel extends JPanel implements ActionVisualization, ActionListener {
 	
-	JTextField queryField = new JTextField("Table Table");
 	
+	// This table will be created from the database.
+	JTable editableTable = new JTable(2,2);
 	// The executeButton is the button that will tell the
 	// DataPanel that this action has a completed User SQL 
 	// request that needs to be processed.
@@ -28,8 +31,10 @@ public class TableEditPanel extends JPanel implements ActionVisualization {
 	}
 	
 	private void initialize(){
-		this.add(new JTextArea("Editing Table"));
-		this.add(queryField);
+		JButton goButton = new JButton("go");
+		goButton.setActionCommand("go");
+		goButton.addActionListener(this);
+		this.add(goButton);
 		executeButton = new JButton("Execute");
 		executeButton.setActionCommand("execute");
 	}
@@ -48,6 +53,13 @@ public class TableEditPanel extends JPanel implements ActionVisualization {
 
 	public void executionResult(JTable resultTable) {
 		System.out.println("TableEditPanel Got Table!!");
+		
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand() == "go"){
+			
+		}
 		
 	}
 	

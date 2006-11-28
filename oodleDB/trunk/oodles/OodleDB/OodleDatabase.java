@@ -7,13 +7,18 @@ import java.util.HashMap;
 import oodles.RMICommon.RemoteDatabase;
 
 /**
- * @author Mike Wadhear and Sam Chang
+ * @author Mike Wadhera and Sam Chang
  *
  */
+
 public class OodleDatabase implements RemoteDatabase{
 
 	private String name;
 	private HashMap<String, OodleTable> tableCollection;
+	
+	public OodleDatabase(String name){
+		name = this.name;
+	}
 	
 	public String getName(){
 		return name;

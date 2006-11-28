@@ -7,6 +7,20 @@ import java.sql.SQLException;
 
 /**
  * Provides a remote interface to the Database Server that will be made available over RMI.
+ * 
+ * <strong>About RemoteException</strong>
+ * 
+ * <p>
+ * 	All the methods within this interface throw RemoteException; RemoteException is
+ * 	required by RMI for dealing with RMI-level problems like lost connections,
+ * 	server failure, etc.
+ * </p>
+ * 
+ * <p>
+ * 	Implementations of these interfaces need not attempt to throw RemoteExceptions,
+ * 	as these exceptions are designed to originate from within the proxy object.
+ * </p>
+ * 
  */
 public interface RemoteDatabaseServer extends Remote {
 	

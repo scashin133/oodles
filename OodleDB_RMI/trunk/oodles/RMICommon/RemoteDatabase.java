@@ -7,7 +7,23 @@ import java.util.Collection;
 
 
 /**
+ * <p>
  * Provides an interface for interacting with a database over RMI.
+ * </p>
+ * 
+ * <strong>About RemoteException</strong>
+ * 
+ * <p>
+ * 	All the methods within this interface throw RemoteException; RemoteException is
+ * 	required by RMI for dealing with RMI-level problems like lost connections,
+ * 	server failure, etc.
+ * </p>
+ * 
+ * <p>
+ * 	Implementations of these interfaces need not attempt to throw RemoteExceptions,
+ * 	as these exceptions are designed to originate from within the proxy object.
+ * </p>
+ * 
  */
 public interface RemoteDatabase extends Remote {
 

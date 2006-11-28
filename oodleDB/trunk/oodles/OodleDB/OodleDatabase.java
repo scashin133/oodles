@@ -4,12 +4,13 @@
 package oodles.OodleDB;
 
 import java.util.HashMap;
+import oodles.RMICommon.RemoteDatabase;
 
 /**
  * @author Mike Wadhear and Sam Chang
  *
  */
-public class OodleDatabase {
+public class OodleDatabase implements RemoteDatabase{
 
 	private String name;
 	private HashMap<String, OodleTable> tableCollection;

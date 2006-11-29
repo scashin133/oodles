@@ -78,6 +78,8 @@ public class ActionPanel extends JPanel implements ActionListener{
 		}
 		//After the toolbar has been populated, add it to the ActionPanel
 		this.add(actionPanelToolBar, BorderLayout.NORTH);
+		this.revalidate();
+		this.repaint();
 	}
 	//This is triggered by an action button being pressed.
 	public void actionPerformed(ActionEvent e){

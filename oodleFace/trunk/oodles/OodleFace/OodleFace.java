@@ -20,7 +20,7 @@ public class OodleFace {
 	// -Wizard Managers no long extend Wizard, but instead contain a Wizard
 	// due to how Wizards need to be constructed
 	
-	
+	static SQLExecutor mySQLE = new SQLExecutor();
 
 	// I basically copied this out of the tutorial, something about
 	// thread safe.  I don't entirely understand it, but it works fine.
@@ -50,10 +50,10 @@ public class OodleFace {
 		mainWindow.setContentPane(mainPanel);
 		
 		// Create actions
-		Action manualQuery = new Action("Manual Query Entry", new QueryEntryPanel());
-		Action tableEdit = new Action("Table Editor", new TableEditPanel());
-		Action wizardQuery = new Action("Query Wizard", new QueryEntryWizardManager());
-		Action wizardTable = new Action("Table Wizard", new TableModificationWizardManager());
+		Action manualQuery = new Action("Manual Query Entry", new QueryEntryPanel(mySQLE));
+		Action tableEdit = new Action("Table Editor", new TableEditPanel(mySQLE));
+		Action wizardQuery = new Action("Query Wizard", new QueryEntryWizardManager(mySQLE));
+		Action wizardTable = new Action("Table Wizard", new TableModificationWizardManager(mySQLE));
 		
 		// Create Views and addActions to them
 		View queryView = new View("Query", new ImageIcon("images/query.png"));

@@ -48,6 +48,7 @@ public class DataPanel extends JPanel implements ActionListener{
 		//Add the Panel associated with the action
 		actionVisualizationPanel = targetAction.getPanel();
 		this.add((JPanel)actionVisualizationPanel, BorderLayout.CENTER);
+		actionVisualizationPanel.launch();
 		// Things tend to need to be revailidated and repainted when they
 		// are changed.  This is not always the case, but I've pretty much
 		// included it everywhere I could to be safe.

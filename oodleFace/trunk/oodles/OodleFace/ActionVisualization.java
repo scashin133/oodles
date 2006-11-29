@@ -12,9 +12,8 @@ import javax.swing.JTable;
  */
 public interface ActionVisualization {
 
-	// This function was left in only because it was specified in the design
-	// At this point it does not serve a purpose.
 	public boolean launch();
+	
 	public ArrayList<String> getResult();
 	
 	// This method was added so that DataPanel knows

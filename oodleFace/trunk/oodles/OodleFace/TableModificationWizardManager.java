@@ -12,6 +12,8 @@ import org.pietschy.wizard.models.StaticModel;
 public class TableModificationWizardManager extends JPanel implements
 		ActionVisualization {
 
+	SQLExecutor mySQLE;
+	
 	/**
 	 * 
 	 */
@@ -19,8 +21,9 @@ public class TableModificationWizardManager extends JPanel implements
 	Wizard myWizard;
 	ArrayList<String> myCommands = new ArrayList<String>();
 	
-	public TableModificationWizardManager(){
+	public TableModificationWizardManager(SQLExecutor sqle){
 		super();
+		mySQLE = sqle;
 		createWizard();
 	}
 	

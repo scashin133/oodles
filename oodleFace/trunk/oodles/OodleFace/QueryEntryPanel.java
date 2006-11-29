@@ -24,14 +24,17 @@ public class QueryEntryPanel extends JPanel implements ActionVisualization {
 	 */
 	private static final long serialVersionUID = -2020354813278679602L;
 
+	SQLExecutor mySQLE;
+	
 	// The execute button is the button that will tell DataPanel
 	// the user has finished entering data, and there's a result
 	// to get from the Panel.
 	JButton executeButton;
 	
 	JTextField queryField = new JTextField(45);
-	public QueryEntryPanel(){
+	public QueryEntryPanel(SQLExecutor sqle){
 		super();
+		mySQLE = sqle;
 		this.initialize();
 	}
 	
@@ -64,12 +67,16 @@ public class QueryEntryPanel extends JPanel implements ActionVisualization {
 	}
 
 	public void executionResult(JTable resultTable) {
-		// The table will be the 4th component, if an older table
+		// The table will be the 4th through 6th component, if an older table
 		// exists there, remove it.
-		if (this.getComponentCount() == 4){
+		if (this.getComponentCount() == 6){
+			this.remove(5);
+			this.remove(4);
 			this.remove(3);
 		}
-		this.add(resultTable, 3);
+		this.add(new JLabel(resultTable.getName()), 3);
+		this.add(resultTable.getTableHeader(), 4);
+		this.add(resultTable, 5);
 		
 		this.revalidate();
 		this.repaint();

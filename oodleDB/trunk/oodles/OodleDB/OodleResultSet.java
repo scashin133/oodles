@@ -241,7 +241,12 @@ public class OodleResultSet
 	 * Retrieves whether the cursor is on the last row of this ResultSet object.
 	 */
 	public boolean next() throws SQLException {
-		cursor++;	
+		if (cursor == getRowCount() + 1)
+		{
+			return false;
+		}
+		cursor++;
+		return true;
 	}
 
 	/**
@@ -250,7 +255,12 @@ public class OodleResultSet
 	 * Moves the cursor to the previous row in this ResultSet object.
 	 */
 	public boolean previous() throws SQLException {
+		if (cursor == 0)
+		{
+			return false;
+		}
 		cursor--;
+		return true;
 	}
 	
 	

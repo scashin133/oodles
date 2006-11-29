@@ -40,14 +40,29 @@ public class OodleStatement implements Statement {
 	
 	/** Caches the ResultSet from the last query we executed, or is null if the last query didn't have a ResultSet */ 
 	protected ResultSet currentResultSet; 
-	
-	protected static final Pattern COMMA_DELIMITER =
+
+	/** A pattern that can be used to split a comma seperated list while stripping whitespace around the comma-seperated tokens. */
+	protected static final Pattern COMMA_DELIMITER_PATTERN =
 		Pattern.compile("\\s*,\\s*");
 	
-	/** Matches a list of columns */
+	/** Matches a comma seprated list of columns names */
 	protected static final Pattern COLUMN_LIST =
 		Pattern.compile("\\w+(?:\\s*,\\s*\\w+)*");
 	
+	/**
+	 * <p>
+	 * 	Matches am UPDATE query's assignment clause
+	 * </p>
+	 * 
+	 * <strong>Groups</strong>
+	 * <ol>
+	 * 	<li>Column Name: The name of the column to assign to</li>
+	 * 	<li>Expression: The expression to asign to that column</li>
+	 * </ol>	 
+	 * 
+	 */
+	protected static final Pattern COLUMN_ASSIGNMENT_CLAUSE_PATTERN =
+		Pattern.compile("(\\w+)\\s*=\\s*(.*)");
 	
 	/** The pattern for a column schema */
 	protected static final Pattern COLUMN_SCHEMA_PATTERN = 
@@ -59,7 +74,19 @@ public class OodleStatement implements Statement {
 		Pattern.compile("use\\s+(\\w+)");
 	
 	
-	/** The pattern for an ALTER TABLE query */
+	/** 
+	 * <p>
+	 * The pattern for an ALTER TABLE query 
+	 * </p>
+	 * 
+	 * <strong>Groups</strong>
+	 * <ol>
+	 * 	<li>Table Name: The name of the table to alter</li>
+	 * 	<li>New Column Name: the name of the new column</li>
+	 * 	<li>New Column Type: the type of the new column</li>
+	 * </ol>
+	 * 
+	 */
 	protected static final Pattern ALTER_QUERY_PATTERN = 
 		Pattern.compile("alter\\s+table\\s+(\\w+)\\s+add\\s+column\\s+(\\w+)\\s+(\\w+)",
 		Pattern.CASE_INSENSITIVE);
@@ -122,7 +149,7 @@ public class OodleStatement implements Statement {
 	 * <strong>Groups:</strong>
 	 * <ol>
 	 * 	<li>Table Name: the table to update</li>
-	 *  <li>Assignments: the changes to make to the table</li>
+	 *  <li>Set Clause: the changes to make to the table</li>
 	 * 	<li>Where Clause: the conditions on which to make the changes</li>
 	 * </ol>
 	 */
@@ -204,10 +231,14 @@ public class OodleStatement implements Statement {
 		Pattern.CASE_INSENSITIVE);
 	
 	
-	
-	
 
-	
+	/**
+	 * Constructs an OodleStatement for a particular connection object.
+	 * 
+	 * @param connection The connection object to bind this OodleStatement to.
+	 * 
+	 * @throws IllegalArgumentException if the connection is null.
+	 */
 	public OodleStatement(OodleConnection connection) throws IllegalArgumentException {
 		
 		/* Make sure we have an actual connection */
@@ -242,7 +273,6 @@ public class OodleStatement implements Statement {
 		currentResultSet = null;
 		
 		/* Peek at the query and hand it off to a helper */
-		
 		
 		try {
 		
@@ -593,7 +623,7 @@ public class OodleStatement implements Statement {
 			
 			ArrayList<String> columnNameCollection = new ArrayList<String>();
 			
-			for (String columnName : columnList.split( COMMA_DELIMITER.pattern() )) {
+			for (String columnName : columnList.split( COMMA_DELIMITER_PATTERN.pattern() )) {
 				columnNameCollection.add(columnName);
 			}
 			
@@ -604,7 +634,7 @@ public class OodleStatement implements Statement {
 			
 			ArrayList<String> valueCollection = new ArrayList<String>();
 			
-			for (String value : valueList.split( COMMA_DELIMITER.pattern() )) {
+			for (String value : valueList.split( COMMA_DELIMITER_PATTERN.pattern() )) {
 				columnNameCollection.add(value);
 			}
 			
@@ -634,7 +664,7 @@ public class OodleStatement implements Statement {
 			
 			ArrayList<String> columnNameCollection = new ArrayList<String>();
 			
-			for (String columnName : columnList.split( COMMA_DELIMITER.pattern() )) {
+			for (String columnName : columnList.split( COMMA_DELIMITER_PATTERN.pattern() )) {
 				columnNameCollection.add(columnName);
 			}
 			
@@ -685,7 +715,71 @@ public class OodleStatement implements Statement {
 
 	protected void executeUpdateQuery(String query) throws SQLException, RemoteException {
 		
+		Matcher updateQueryMatcher = UPDATE_QUERY_PATTERN.matcher(query);
+		
+		if (updateQueryMatcher.matches()) {
+			
+			String tableName = updateQueryMatcher.group(1);
+			String setClause = updateQueryMatcher.group(2);
+			String whereClause = updateQueryMatcher.group(3);
+			
+			
+			/* Parse SET clause */
+			
+			String[] assignmentList = COMMA_DELIMITER_PATTERN.split(setClause);
+
+			/* Parse assignment list */
+			
+			ArrayList<String> columnNames = new ArrayList<String>(assignmentList.length);
+			ArrayList<String> columnValues = new ArrayList<String>(assignmentList.length);
+			
+			for (String assignmentClause : assignmentList) {
+				
+				/* Parse each column assignment clause */
+				
+				Matcher assignmentClauseMatcher = COLUMN_ASSIGNMENT_CLAUSE_PATTERN.matcher(assignmentClause);
+
+				if (assignmentClauseMatcher.matches()) {
+					
+					/* It looks valid */
+					
+					String columnName = assignmentClauseMatcher.group(1);
+					String columnValue = assignmentClauseMatcher.group(2);
+					
+					columnNames.add(columnName);
+					columnValues.add(columnValue);
+					
+				} else {
+					
+					/* oops :P */
+					
+					throw new SQLException("Column assignment clause in UPDATE query was malformed");
+					
+				}
+				
+			}
+			
+			/* Pass the changes along */
+			
+			parentConnection.getDatabase().update(tableName, columnNames, columnValues, whereClause);
+			
+			
+		} else {
+			throw new SQLException("UPDATE query was malformed.");
+		}
+		
 	}
+	
+	
+	/**
+	 * Returns the connection that this OodleStatement belongs to.
+	 * 
+	 * @return The parent connection.
+	 */
+	public Connection getConnection() throws SQLException {
+		return parentConnection;
+	}
+	
 	
 	
 	/*
@@ -701,173 +795,136 @@ public class OodleStatement implements Statement {
 	}
 
 	public void clearBatch() throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public void clearWarnings() throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public void close() throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Unsupported Operation.");
 	}
 
 
 	public boolean execute(String arg0, int arg1) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public boolean execute(String sql, int[] columnIndexes) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public boolean execute(String sql, String[] columnNames)
 			throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public int[] executeBatch() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public ResultSet executeQuery(String sql) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public int executeUpdate(String sql) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public int executeUpdate(String sql, int autoGeneratedKeys)
 			throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public int executeUpdate(String sql, int[] columnIndexes)
 			throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public int executeUpdate(String sql, String[] columnNames)
 			throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public Connection getConnection() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public int getFetchDirection() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public int getFetchSize() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public ResultSet getGeneratedKeys() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public int getMaxFieldSize() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public int getMaxRows() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public boolean getMoreResults() throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public boolean getMoreResults(int current) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public int getQueryTimeout() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public int getResultSetConcurrency() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public int getResultSetHoldability() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public int getResultSetType() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public int getUpdateCount() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public SQLWarning getWarnings() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public void setCursorName(String name) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public void setEscapeProcessing(boolean enable) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public void setFetchDirection(int direction) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public void setFetchSize(int rows) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public void setMaxFieldSize(int max) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public void setMaxRows(int max) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Unsupported Operation.");
 	}
 
 	public void setQueryTimeout(int seconds) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Unsupported Operation.");
 	}
 
 }

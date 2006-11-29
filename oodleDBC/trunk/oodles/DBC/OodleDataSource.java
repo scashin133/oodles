@@ -67,7 +67,7 @@ public class OodleDataSource implements DataSource {
 	 * 
 	 * </p> 	
 	 *  
-	 * @param dbConnetionString The connection string to use when creating connections.
+	 * @param dbConnectionString The connection string to use when creating connections.
 	 * 
 	 * @throws IllegalArgumentException if the connection string is invalid.
 	 */

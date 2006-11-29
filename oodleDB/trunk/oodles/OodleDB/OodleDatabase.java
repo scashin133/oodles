@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
 
 import oodles.RMICommon.ColumnSchema;
 import oodles.RMICommon.RemoteDatabase;
@@ -62,43 +64,94 @@ public class OodleDatabase implements RemoteDatabase{
 		}
 	}
 	
-	public int update(String tableName, Collection<String> columnNames, Collection<String> newValues, ConditionList conditions) throws SQLException, RemoteException {
-		return 0;
+	public int update(String tableName, Collection<String> columnNames, List<String> newValues, String conditions) throws SQLException, RemoteException {
+		DatabaseTable table = tableCollection.get(tableName);
+		int affectedRows = 0;
+		if (table != null) {
+			ArrayList<Integer> indices = table.findSatisfiedRows(conditions);
+			for (int index : indices) {
+				// Step through each column in the row and check to see if we need to update each column's value
+				for (int i=0;i<table.getColumnCount();i++) {
+					// Step through each column specificed in the update to see if its the one we are on
+					int columnIndex = 0;
+					for (String column : columnNames) {
+						if (table.getColumnName(i) == column) {
+							// Rewrite the columns data
+							table.setValueAt(newValues.get(columnIndex), index, i);
+							affectedRows++;
+						}
+						columnIndex++;
+					}
+				}
+			}
+			return affectedRows;
+		} else {
+			return affectedRows;
+		}
 	}
 
 	public int delete(String tableName, String whereClause) throws SQLException, RemoteException {
-		// TODO Auto-generated method stub
-		return 0;
+		DatabaseTable table = tableCollection.get(tableName);
+		int affectedRows = 0;
+		if (table != null) {
+			ArrayList<Integer> indices = table.findSatisfiedRows(whereClause);
+			for (int index : indices) {
+				table.removeRow(index);
+				affectedRows++;
+			}
+		}
+		return affectedRows;
 	}
 
 	public int deleteAllFromTable(String tableName) throws SQLException, RemoteException {
-		// TODO Auto-generated method stub
-		return 0;
+		DatabaseTable table = tableCollection.get(tableName);
+		int total = table.getRowCount();
+		for (int i=0;i<total;i++) {
+			table.removeRow(i);
+		}
+		return total;
 	}
 
 	public ResultSet describeTable(String tableName) throws SQLException, RemoteException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public int dropTable(String tableName) throws SQLException, RemoteException {
-		// TODO Auto-generated method stub
-		return 0;
+		if (tableCollection.get(tableName) != null) {
+			tableCollection.remove(tableName);
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 
-	public int insert(String tableName, Collection<String> columnNames, Collection<String> values) throws SQLException, RemoteException {
-		// TODO Auto-generated method stub
-		return 0;
+	public int insert(String tableName, Collection<String> columnNames, List<String> values) throws SQLException, RemoteException {
+		DatabaseTable table = tableCollection.get(tableName);
+		if (table != null) {
+			Vector rowData = null;
+			table.addRow(rowData);
+			int index = table.getRowCount() - 1;
+				// Step through each column in the row and check to see if we need to update each column's value
+				for (int i=0;i<table.getColumnCount();i++) {
+					// Step through each column specificed in the insert to see if its the one we are on
+					int columnIndex = 0;
+					for (String column : columnNames) {
+						if (table.getColumnName(i) == column) {
+							// Rewrite the columns data
+							table.setValueAt(values.get(columnIndex), index, i);
+						}
+						columnIndex++;
+					}
+				}			
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 
 	public ResultSet showTables() throws SQLException, RemoteException {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	public int update(String tableName, Collection<String> columnNames, Collection<String> newValues, String whereClause) throws SQLException, RemoteException {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 	
 }

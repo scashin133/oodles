@@ -6,8 +6,12 @@ package oodles.OodleDB;
  * @author mitch
  *
  */
-public interface ConditionList {
+public class ConditionList {
 
-	public void add(ConditionList cl);
+	
+	public ConditionList (String conditions) {
+		
+	}
+	
 	
 }

@@ -35,12 +35,14 @@ public class OodleDatabase implements RemoteDatabase{
 	}
 	
 	public void getTables(){
-		
 	}
 	
 	public void getTables(String something){
-		
 	}
+	
+	/**
+	 * Query Functions
+	 */
 	
 	public OodleResultSet select(String tableName, Collection<String> columnNames, String conditions) {
 		DatabaseTable table = tableCollection.get(tableName);
@@ -49,7 +51,7 @@ public class OodleDatabase implements RemoteDatabase{
 
 	
 	public int createTable(String tableName, Collection<ColumnSchema> columns) throws SQLException, RemoteException {
-		DatabaseTable table = new DatabaseTable(tableName, columns);
+		DatabaseTable table = new DatabaseTable(tableName, columns);  // <--Confused, Why an error?
 		tableCollection.put(tableName, table);
 		return tableCollection.size();
 	}
@@ -64,6 +66,14 @@ public class OodleDatabase implements RemoteDatabase{
 		}
 	}
 	
+	/**
+	 * update query
+	 * 
+	 * A bit messy only because did not implement or handle index saving in the ResultSet.  
+	 * Therefore this update has to manage checking for specific index matches.
+	 * 
+	 * Not a great way to implement but saves time for now.	
+	 */
 	public int update(String tableName, Collection<String> columnNames, List<String> newValues, String conditions) throws SQLException, RemoteException {
 		DatabaseTable table = tableCollection.get(tableName);
 		int affectedRows = 0;
@@ -124,7 +134,8 @@ public class OodleDatabase implements RemoteDatabase{
 			return 0;
 		}
 	}
-
+	
+	
 	public int insert(String tableName, Collection<String> columnNames, List<String> values) throws SQLException, RemoteException {
 		DatabaseTable table = tableCollection.get(tableName);
 		if (table != null) {

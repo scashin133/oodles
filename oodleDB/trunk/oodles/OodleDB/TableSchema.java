@@ -8,13 +8,27 @@ import java.util.ArrayList;
  */
 public class TableSchema {
 	
+	/**
+	 * Setting up
+	 */
 	private ColumnSchema primaryKey;
 	private ArrayList<ColumnSchema> schema;
 	
+	/**
+	 * TableSchema() Constructor
+	 *
+	 * Builds a new TableSchema object and also creates an ArrayList to hold
+	 * column names
+	 */
 	public TableSchema() {
 		schema = new ArrayList<ColumnSchema>();
 	}
 	
+	/**
+	 * ColumnSchema()
+	 * 
+	 * Returns the primarykey based on the ColumnSchema
+	 */
 	public ColumnSchema getPrimaryKey(){
 		return primaryKey;
 	}

@@ -8,6 +8,8 @@ import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 
+import oodles.RMICommon.ColumnSchema;
+
 
 /**
  * @author Mike Wadhera and Sam Chang
@@ -25,10 +27,10 @@ public class DatabaseTable extends DefaultTableModel{
 		
 	}
 	
-	public DatabaseTable(String name, Collection<ColumnSchema> columnNames) {
+	public DatabaseTable(String name, Collection<ColumnSchema> columns) {
 		this.name = name;
 		schema = new TableSchema();
-		for (ColumnSchema c : columnNames) {
+		for (ColumnSchema c : columns) {
 			schema.addColumn(c);
 		}
 	}

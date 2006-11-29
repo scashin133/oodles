@@ -15,8 +15,13 @@ import javax.swing.table.DefaultTableModel;
  */
 
 public class DatabaseTable extends DefaultTableModel{
+	
 	private String name;
 	private TableSchema schema;
+	
+	public DatabaseTable() {
+		
+	}
 	
 	public DatabaseTable(String name, Collection<ColumnSchema> columnNames) {
 		this.name = name;
@@ -38,7 +43,7 @@ public class DatabaseTable extends DefaultTableModel{
 		
 	}
 	
-	public OodleResultSet query(ArrayList<String> columnNames, String conditions){
+	public OodleResultSet query(Collection<String> columnNames, String conditions){
 		return null;
 	}
 	

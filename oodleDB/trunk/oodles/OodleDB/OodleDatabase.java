@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import oodles.RMICommon.ColumnSchema;
 import oodles.RMICommon.RemoteDatabase;
 
 /**
@@ -43,14 +44,15 @@ public class OodleDatabase implements RemoteDatabase{
 		DatabaseTable table = tableCollection.get(tableName);
 		return table.query(columnNames, conditions);
 	}
+
 	
-	public int createTable(String tableName, Collection<ColumnSchema> columns, ConditionList conditions) {
+	public int createTable(String tableName, Collection<ColumnSchema> columns) throws SQLException, RemoteException {
 		DatabaseTable table = new DatabaseTable(tableName, columns);
 		tableCollection.put(tableName, table);
 		return tableCollection.size();
 	}
-	
-	public int alterTable(String tableName, ColumnSchema newColumn) {
+
+	public int alterTable(String tableName, ColumnSchema newColumn) throws SQLException, RemoteException {
 		DatabaseTable table = tableCollection.get(tableName);
 		if (table != null) {
 			table.addColumn(newColumn);
@@ -60,12 +62,7 @@ public class OodleDatabase implements RemoteDatabase{
 		}
 	}
 	
-	public int update(String tableName, Collection<String> columnNames, Collection<String> newValues, ConditionList conditions) {
-		return 0;
-	}
-
-	public int alterTable(String tableName, oodles.RMICommon.ColumnSchema columnSchemaToBeAdded) throws SQLException, RemoteException {
-		// TODO Auto-generated method stub
+	public int update(String tableName, Collection<String> columnNames, Collection<String> newValues, ConditionList conditions) throws SQLException, RemoteException {
 		return 0;
 	}
 

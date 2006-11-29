@@ -41,6 +41,13 @@ public class OodleStatement implements Statement {
 	/** Caches the ResultSet from the last query we executed, or is null if the last query didn't have a ResultSet */ 
 	protected ResultSet currentResultSet; 
 	
+	protected static final Pattern COMMA_DELIMITER =
+		Pattern.compile("\\s*,\\s*");
+	
+	/** Matches a list of columns */
+	protected static final Pattern COLUMN_LIST =
+		Pattern.compile("\\w+(?:\\s*,\\s*\\w+)*");
+	
 	
 	/** The pattern for a column schema */
 	protected static final Pattern COLUMN_SCHEMA_PATTERN = 
@@ -58,25 +65,132 @@ public class OodleStatement implements Statement {
 		Pattern.CASE_INSENSITIVE);
 	
 	
-	/** The pattern for an CREATE query */
+	/**
+	 * <p>
+	 * 	Matches CREATE queries
+	 * </p>
+	 * 
+	 * <strong>Groups</strong>
+	 * <ol>
+	 * 	<li>Database mode: "database" (case insensitive) if this is a CREATE DATABASE query, or null otherwise.</li>
+	 * 	<li>Table mode: "table" (case insenstive) if this is a CREATE TABLE query, or null otherwise.</li>
+	 * 	<li>Create clause: the parameters 
+	 * 
+	 */
 	protected static final Pattern CREATE_QUERY_PATTERN = 
 		Pattern.compile("create\\s+(database)|(table)\\s+(.*)",
 		Pattern.CASE_INSENSITIVE);
 	
+	/**
+	 * <p>
+	 * 	Matches SELECT queries
+	 * </p>
+	 * 
+	 * <strong>Groups:</strong>
+	 * <ol>
+	 * 	<li>Columns to Select: "*" or comma delimited list of column names</li>
+	 *  <li>Table Name: The table name to select from</li>
+	 *  <li>Where Clause: The where clause </li>
+	 * </ol>
+	 */
+	protected static final Pattern SELECT_QUERY_PATTERN = 
+		Pattern.compile("select\\s+(\\*|(?:\\w+(?:\\s*,\\s*\\w+)*))\\s+from\\s+(\\w+)\\s+where\\s+(.*)",
+		Pattern.CASE_INSENSITIVE);
 	
-	// TODO: SELECT query patterns
 	
-	// TODO: DELETE query patterns
+	/**
+	 * <p>
+	 * 	Matches DELETE queries.
+	 * </p>
+	 * 
+	 * <strong>Groups:</strong>
+	 * <ol>
+	 * 	<li>Table Name: the table to delete from</li>
+	 * 	<li>Where Clause: the conditions on which to delete</li>
+	 * </ol>
+	 */
+	protected static final Pattern DELETE_QUERY_PATTERN = 
+		Pattern.compile("delete\\s+from\\s+(\\w+)\\s+where\\s+(.*)",
+		Pattern.CASE_INSENSITIVE);
 	
-	// TODO: UPDATE query patterns
 	
-	// TODO: DESCRIBE query patterns
+	/**
+	 * <p>
+	 * 	Matches UPDATE queries
+	 * </p>
+	 * 
+	 * <strong>Groups:</strong>
+	 * <ol>
+	 * 	<li>Table Name: the table to update</li>
+	 *  <li>Assignments: the changes to make to the table</li>
+	 * 	<li>Where Clause: the conditions on which to make the changes</li>
+	 * </ol>
+	 */
+	protected static final Pattern UPDATE_QUERY_PATTERN = 
+		Pattern.compile("update\\s+(\\w+)\\s+set\\s+(.*?)\\s+where\\s+(.*)",
+		Pattern.CASE_INSENSITIVE);
 	
-	// TODO: INSERT query patterns
+
+	/**
+	 * <p>
+	 * 	Matches DESCRIBE queries
+	 * </p>	
+	 * 
+	 * <strong>Groups:</strong>
+	 * <ol>
+	 * 	<li>Table Name: the table to describe</li>
+	 * </ol>
+	 */
+	protected static final Pattern DESCRIBE_QUERY_PATTERN = 
+		Pattern.compile("describe\\s+(\\w+)",
+		Pattern.CASE_INSENSITIVE);
 	
-	// TODO: SHOW query patterns
+
+	/**
+	 * <p>
+	 * 	Matches insert queries
+	 * </p>
+	 * 
+	 * <strong>Groups:</strong>
+	 * <ol>
+	 * 	<li>Table Name: the table to describe</li>
+	 * 	<li>Column List: A comma seperated list of columns to be changed</li>
+	 * 	<li>Value List: A comma seperated list of values to assign to the columns</li>
+	 * </ol>
+	 */
+	protected static final Pattern INSERT_QUERY_PATTERN = 
+		Pattern.compile("insert\\s+into\\s+(\\w+)\\s+\\((.*?)\\)\\s+values\\s+\\((.*)\\)",
+		Pattern.CASE_INSENSITIVE);
 	
-	// TODO: DROP query patterns
+	
+	/**
+	 * <p>Matches DROP queries</p>
+	 *  
+	 * <strong>Groups:</strong>
+	 * <ol>
+	 * 	<li>Target type: "table" or "database" (case insensitive), indicating what type of entity should be dropped</li>
+	 * 	<li>Target name: The name of the table or database to drop.</li>
+	 * </ol>
+	 */
+	protected static final Pattern DROP_QUERY_PATTERN = 
+		Pattern.compile("drop\\s+(table|database)\\s+(\\w+)",
+		Pattern.CASE_INSENSITIVE);
+	
+	
+	
+	/**
+	 * <p>Matches SHOW queries</p>
+	 *  
+	 * <strong>Groups:</strong>
+	 * <ol>
+	 * 	<li>Target type: "tables" or "databases" (case insensitive), indicating what type of entity should be shown</li>
+	 * </ol>
+	 */
+	protected static final Pattern SHOW_QUERY_PATTERN = 
+		Pattern.compile("show\\s+(tables|databases)",
+		Pattern.CASE_INSENSITIVE);
+	
+	
 	
 	/** The pattern for the table definition clause of a CREATE TABLE query */
 	protected static final Pattern TABLE_DEFINITION_CLAUSE_PATTERN = 
@@ -99,7 +213,7 @@ public class OodleStatement implements Statement {
 		/* Make sure we have an actual connection */
 		
 		if (connection == null) {
-			throw new IllegalArgumentException("Connection cannot be null.");
+			throw new IllegalArgumentException("Connection cannot be null. (Read: go fuck yourself.)");
 		}
 		
 		this.parentConnection = connection; 
@@ -143,6 +257,34 @@ public class OodleStatement implements Statement {
 			} else if ( CREATE_QUERY_PATTERN.matcher(query).matches() ) {	
 				
 				executeCreateQuery(query);
+				
+			} else if ( SELECT_QUERY_PATTERN.matcher(query).matches() ) {	
+				
+				executeSelectQuery(query);
+				
+			} else if ( DELETE_QUERY_PATTERN.matcher(query).matches() ) {	
+				
+				executeDeleteQuery(query);
+				
+			} else if ( UPDATE_QUERY_PATTERN.matcher(query).matches() ) {	
+				
+				executeUpdateQuery(query);
+			
+			} else if ( DESCRIBE_QUERY_PATTERN.matcher(query).matches() ) {	
+				
+				executeDescribeQuery(query);
+			
+			} else if ( INSERT_QUERY_PATTERN.matcher(query).matches() ) {	
+				
+				executeInsertQuery(query);
+			
+			} else if ( DROP_QUERY_PATTERN.matcher(query).matches() ) {	
+				
+				executeDropQuery(query);
+				
+			} else if ( SHOW_QUERY_PATTERN.matcher(query).matches() ) {	
+				
+				executeShowQuery(query);
 				
 			} else {
 				
@@ -337,29 +479,207 @@ public class OodleStatement implements Statement {
 		
 	}
 	
-	
+	/**
+	 * Execute a DELETE query on the database.
+	 * 
+	 * @param query
+	 * @throws SQLException
+	 * @throws RemoteException
+	 */
 	protected void executeDeleteQuery(String query) throws SQLException, RemoteException {
 		
+		Matcher deleteQueryMatcher = DELETE_QUERY_PATTERN.matcher(query);
+		
+		if (deleteQueryMatcher.matches()) {
+			
+			String tableName = deleteQueryMatcher.group(1);
+			String whereClause = deleteQueryMatcher.group(2);
+			
+			parentConnection.getDatabase().delete(tableName, whereClause);
+			
+		} else {
+			throw new SQLException("DELETE query was malformed.");
+		}
+		
 	}
 	
+	/**
+	 * Executes a DESCRIBE query on the database
+	 * 
+	 * @param query
+	 * @throws SQLException
+	 * @throws RemoteException
+	 */
 	protected void executeDescribeQuery(String query) throws SQLException, RemoteException {
 		
-	}
-	
-	protected void executeDropQuery(String query) throws SQLException, RemoteException {
+		Matcher describeQueryMatcher = DESCRIBE_QUERY_PATTERN.matcher(query);
+		
+		if (describeQueryMatcher.matches()) {
+			
+			String tableName = describeQueryMatcher.group(1);
+			
+			currentResultSet = parentConnection.getDatabase().describeTable(tableName);
+			
+		} else {
+			throw new SQLException("DESCRIBE query was malformed.");
+		}
 		
 	}
 	
+	/**
+	 * Executes DROP TABLE and DROP DATABASE queries on the server.
+	 * 
+	 * @param query
+	 * @throws SQLException
+	 * @throws RemoteException
+	 */
+	protected void executeDropQuery(String query) throws SQLException, RemoteException {
+		
+		Matcher dropQueryMatcher = DROP_QUERY_PATTERN.matcher(query);
+		
+		if (dropQueryMatcher.matches()) {
+			
+			String targetType = dropQueryMatcher.group(1).toLowerCase();
+			String targetName = dropQueryMatcher.group(2);
+			
+			if (targetType == "table") {
+				
+				/* We've got a DROP TABLE query */
+				
+				parentConnection.getDatabase().dropTable(targetName);
+				
+			} else if (targetType == "database") {
+				
+				/* We've got a DROP DATABASE query */
+				
+				parentConnection.getDatabaseServer().dropDatabase(targetName);
+				
+			} else {
+				
+				/* We've got something else ... let the world know. */
+				
+				throw new SQLException("Unknown target type for DROP query.");
+			}
+			
+			
+		} else {
+			throw new SQLException("DESCRIBE query was malformed.");
+		}
+		
+	}
+	
+	
+	/**
+	 * Execute an INSERT query on the database
+	 * 
+	 * @param query
+	 * @throws SQLException
+	 * @throws RemoteException
+	 */
 	protected void executeInsertQuery(String query) throws SQLException, RemoteException {
+	
+		Matcher insertQueryMatcher = INSERT_QUERY_PATTERN.matcher(query);
+		
+		if (insertQueryMatcher.matches()) {
+			
+			String tableName = insertQueryMatcher.group(1);
+			String columnList = insertQueryMatcher.group(2);
+			String valueList = insertQueryMatcher.group(3);
+			
+			
+			/* Collect the columns */
+			
+			// TODO: Check to make sure the columnList is valid.
+			
+			ArrayList<String> columnNameCollection = new ArrayList<String>();
+			
+			for (String columnName : columnList.split( COMMA_DELIMITER.pattern() )) {
+				columnNameCollection.add(columnName);
+			}
+			
+			
+			/* Collect the values */
+			
+			// TODO: Check to make sure the value list is valid.
+			
+			ArrayList<String> valueCollection = new ArrayList<String>();
+			
+			for (String value : valueList.split( COMMA_DELIMITER.pattern() )) {
+				columnNameCollection.add(value);
+			}
+			
+			parentConnection.getDatabase().insert(tableName, columnNameCollection, valueCollection);
+			
+		} else {
+			throw new SQLException("INSERT query was malformed.");
+		}
+		
 		
 	}
 	
 	protected void executeSelectQuery(String query) throws SQLException, RemoteException {
 		
+		Matcher selectQueryMatcher = SELECT_QUERY_PATTERN.matcher(query);
+		
+		if (selectQueryMatcher.matches()) {
+			
+			String columnList = selectQueryMatcher.group(1);
+			String tableName = selectQueryMatcher.group(2);
+			String whereClause = selectQueryMatcher.group(3);
+			
+			
+			/* Collect columns */
+			
+			// TODO: check to make sure column list is valid.
+			
+			ArrayList<String> columnNameCollection = new ArrayList<String>();
+			
+			for (String columnName : columnList.split( COMMA_DELIMITER.pattern() )) {
+				columnNameCollection.add(columnName);
+			}
+			
+			currentResultSet = parentConnection.getDatabase().select(tableName, columnNameCollection, whereClause);
+			
+		} else {
+			throw new SQLException("SELECT query was malformed.");
+		}
 	}
 	
+	/**
+	 * Execute a 
+	 * @param query
+	 * @throws SQLException
+	 * @throws RemoteException
+	 */
 	protected void executeShowQuery(String query) throws SQLException, RemoteException {
 		
+		Matcher showQueryMatcher = SHOW_QUERY_PATTERN.matcher(query);
+		
+		if (showQueryMatcher.matches()) {
+			
+			String targetType = showQueryMatcher.group(1).toLowerCase();
+			
+			
+			if (targetType == "tables") {
+				
+				/* Execute a SHOW TABLES query */
+				
+				currentResultSet = parentConnection.getDatabase().showTables();
+				
+			} else if (targetType == "databases") {
+				
+				/* Execute a SHOW DATABASES query */
+				
+				currentResultSet = parentConnection.getDatabaseServer().showDatabases();
+				
+			} else {
+				throw new SQLException("Unknown SHOW query target.");
+			}
+			
+			
+		} else {
+			throw new SQLException("SHOW query was malformed");
+		}
 	}
 	
 

@@ -15,6 +15,7 @@ public class TableBuilder {
 	}
 	
 	public JTable buildTable(ResultSet rs, String tableName) throws SQLException{
+		
 		ResultSetMetaData resultMeta = rs.getMetaData();
 		
 		// Get Column count and names

@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.border.EtchedBorder;
 
-import oodles.DBC.OodleConnection;
-import oodles.DBC.OodleResultSet;
+import oodles.DBC.OodleDataSource;
 
 
 public class SQLExecutor {
@@ -25,7 +24,8 @@ public class SQLExecutor {
 		
 		// The ResultSet is instantiated here in case there
 		// is no query command.
-		ResultSet resultSet = new OodleResultSet();
+		ResultSet resultSet;
+		//ResultSet resultSet = new OodleResultSet(OodleFaceUtil.getTableName(commands.get(0)));
 
 		System.out.println("SQLCommands Received:");
 		for (String s: commands){
@@ -34,10 +34,9 @@ public class SQLExecutor {
 		}
 		System.out.println();
 
-		// TODO this might need to come from a 
-		// Class.forName( "com.somejdbcvendor.TheirJdbcDriver" );
-		// -like statement, but I'm not sure.
-		Connection con = new OodleConnection();
+		OodleDataSource ods= new OodleDataSource("oodles:localhost");
+		
+		Connection con = ods.getConnection();
 
 		// Create a new statement
 		Statement stmt = con.createStatement();
@@ -72,13 +71,10 @@ public class SQLExecutor {
 		}
 
 
-		// TODO This needs to actually go execute SQL commands
-		// Waiting on a stub or hopefully the JDBC component
-
 
 		//ResultSet resultSet;
 		
-		//JTable returnTable = myTableBuilder.buildTable(resultSet, "NEEDTOGETNAME");
+		//JTable returnTable = myTableBuilder.buildTable(resultSet, OodleFaceUtil.getTableName(commands.get(0)));
 
 		returnTable.setBorder(new EtchedBorder());
 		returnTable.setSize(100, 100);

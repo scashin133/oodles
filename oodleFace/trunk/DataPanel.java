@@ -70,26 +70,11 @@ public class DataPanel extends JPanel implements ActionListener{
 				ArrayList<String> commands = new ArrayList<String>();
 				commands = actionVisualizationPanel.getResult();
 				String firstCommand = commands.get(0);
-				Scanner s = new Scanner(firstCommand);
-				// Look for a statement that preceeds a table name
-				while (s.hasNext() && !s.hasNext(Pattern.compile("FROM|TABLE|INTO|ON"))){
-					s.next();
-				}
-				// If the loop exits, there's either table name or
-				// its reached the end of the String
-				if (s.hasNext()){
-					// burn the preceeding token
-					// and take the next as the table name
-					s.next();
-					String tableName = s.next();
-					System.out.println("Table Name: " + tableName);
+				String tableName = OodleFaceUtil.getTableName(firstCommand);
+				if (tableName != null){
 					actionVisualizationPanel.executionResult(executionListener.executeSQL(commands, tableName));
 				}
-				
-				// Otherwise, there was no token found, and an error message
-				// needs to be displayed.  Because results are generally
-				// passed as tables, a new errorTable is created to inform the
-				// user
+				// If the was no table name found:
 				else {
 					DefaultTableModel errorModel = new DefaultTableModel(1,1);
 					errorModel.setValueAt("No table name found", 0, 0);

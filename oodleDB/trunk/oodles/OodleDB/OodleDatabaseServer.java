@@ -28,6 +28,7 @@ public class OodleDatabaseServer implements RemoteDatabaseServer {
 	 */
 	public OodleDatabaseServer(){
 		databaseIsOn = false;
+		databases = new ArrayList();
 	}
 	
 	/**
@@ -81,7 +82,11 @@ public class OodleDatabaseServer implements RemoteDatabaseServer {
 	
 	public int createDatabase(String databaseName) throws SQLException{
 		int dbExistsAt = searchFor(databaseName);
-		if(dbExistsAt > -1)
+		if( !databaseIsOn)
+		{
+			throw new SQLException("Database is off!");
+		}
+		if( dbExistsAt > -1)
 		{
 			throw new SQLException ("Database " + databaseName + " already exists!");
 		}
@@ -101,6 +106,10 @@ public class OodleDatabaseServer implements RemoteDatabaseServer {
 	
 	public int dropDatabase(String databaseName) throws SQLException{
 		int dbExistsAt = searchFor(databaseName);
+		if( !databaseIsOn)
+		{
+			throw new SQLException("Database is off!");
+		}
 		if(dbExistsAt == -1)
 		{
 			throw new SQLException ("Database " + databaseName + " does not exist!");
@@ -128,11 +137,18 @@ public class OodleDatabaseServer implements RemoteDatabaseServer {
 	 * Note to self: Update to a new algorithm if time permits.
 	 */
 	private int searchFor(String databaseName){
-		for(int i = 0; i < databases.size(); i++)
+		if(!databaseIsEmpty())
 		{
-			String compareValue = (databases.get(i)).getName();
-			if (compareValue.compareTo(databaseName) == 0)
-				return i;
+			for(int i = 0; i < databases.size(); i++)
+			{
+				OodleDatabase db = databases.get(i);
+				String compareValue = db.getName();
+				if (compareValue.compareTo(databaseName) == 0)
+				{
+					return i;
+				}
+			}
+			
 		}
 		return -1;
 	}
@@ -151,5 +167,14 @@ public class OodleDatabaseServer implements RemoteDatabaseServer {
 	{
 		//OodleDatabase needs to be Comparable
 		//Collections.sort(databases, String.CASE_INSENSITIVE_ORDER);
+	}
+	
+	private boolean databaseIsEmpty()
+	{
+		if (databases.size() == 0)
+		{
+			return true;
+		}
+		return false;
 	}
 }

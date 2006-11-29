@@ -9,7 +9,8 @@ import java.util.ArrayList;
  * @author Mike Wadhera and Sam Chang
  *
  */
-public class DatabaseTable extends DefaultModel {
+
+public class DatabaseTable extend DefaultTableModel{
 	private String name;
 	private TableSchema schema;
 	

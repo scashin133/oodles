@@ -3,7 +3,7 @@ package oodles.OodleDB;
 import java.util.ArrayList;
 
 /**
- * @author Mike Wadhear and Sam Chang
+ * @author Mike Wadhera and Sam Chang
  *
  */
 public class TableSchema {

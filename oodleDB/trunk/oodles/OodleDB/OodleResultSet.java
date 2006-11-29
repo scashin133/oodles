@@ -28,6 +28,7 @@ import javax.swing.table.DefaultTableModel;
  * layer
  * 
  * @author mitch
+ * edited 11/28/06 by Sam Chang
  *
  */
 
@@ -42,6 +43,13 @@ public class OodleResultSet
 	private static final long serialVersionUID = 1L;
 	private static String SQL_NULL = null;
 	int cursor = 0;
+	String tableName;
+	
+	public OodleResultSet(String tableName){
+		this.tableName = tableName;
+	}
+	
+	
 	
 	/**
 	 * boolean first() throws SQLException
@@ -49,6 +57,7 @@ public class OodleResultSet
 	 * Moves the cursor to the first row in this ResultSet object. 
 	 * Returns: true if the cursor is on a valid row; false if there are no rows in the result set 
 	 */
+	
 	public boolean first() throws SQLException {
 		if(getRowCount() == 0) { return false; }
 		cursor = 0;
@@ -63,10 +72,11 @@ public class OodleResultSet
 	 * Need to look in to ResultSetMetaData and RowSetMetaData
 	 */
 
-	public ResultSetMetaData getMetaData() throws SQLException {
+	/*
+	 public ResultSetMetaData getMetaData() throws SQLException {
 		ResultSetMetaData metaData = new RowSetMetaDataImpl();
 		return metaData;
-	}
+	}*/
 
 	/**
 	 * String getString(int columnIndex)throws SQLException
@@ -127,80 +137,115 @@ public class OodleResultSet
 	}
 	
 	/**
+	 * String getColumnName(int arg0) throws SQLException 
 	 * 
+	 * Retrieves the name of the column at index arg0.  
 	 */
-	public String getColumnName(int arg0){
+	public String getColumnName(int arg0) throws SQLException {
 		if(arg0 > 0 && arg0 <= getColumnCount())
 		{
 			String nameOfColumn = getColumnName(arg0);
 			return nameOfColumn;
 		}
-		throw new SQLException("arg0 in getColumnName is out of bounds.")
+		throw new SQLException("arg0 in getColumnName is out of bounds.");
 	}
 	
-	//	 Implement - Should always return string
-	//   Are we not assuming that the type will always be a String?
+	/**
+	 * getColumnType(int arg0) throws SQLException 
+	 * 
+	 * Since we are always using Strings, we will return the value of
+	 * VARCHAR
+	 */
 	public int getColumnType(int arg0) throws SQLException {
-		throw new UnsupportedOperationException("Our shit is weak");
+		return java.sql.Types.VARCHAR;
 	}
 
-	//	 Implement - Should always return string
+	/**
+	 * getColumnTypeName(int arg0) throws SQLException
+	 * 
+	 * Since we are always using Strings, we will return VARCHAR here.
+	 */
 	public String getColumnTypeName(int arg0) throws SQLException {
-		throw new UnsupportedOperationException("Our shit is weak");
+		return "VARCHAR";
 	}
 
-	//	 Implement - Should always return string
+	/**
+	 * String getTableName(int arg0) throws SQLException 
+	 * 
+	 * Retrieves the name of the table.  Since we are dealing with single table
+	 * ResultSets we only need to return and hold one table name.
+	 */
 	public String getTableName(int arg0) throws SQLException {
-		throw new UnsupportedOperationException("Our shit is weak");
+		return tableName;
 	}
 
-	//	 Implement
-
+	/**
+	 * boolean isAfterLast() throws SQLException 
+	 * 
+	 * Retrieves whether the cursor is after the last row in this ResultSet object.
+	 */
 	public boolean isAfterLast() throws SQLException {
-		throw new UnsupportedOperationException("Our shit is weak");
-		
+		if (cursor > getRowCount())	{ return true;  }
+		return false;	
 	}
 
-	//	 Implement
+	/**
+	 * boolean isBeforeFirst() throws SQLException 
+	 * 
+	 * Retrieves whether the cursor is before the first row in this ResultSet object.
+	 */
 	public boolean isBeforeFirst() throws SQLException {
-		throw new UnsupportedOperationException("Our shit is weak");
-		
+		if (cursor == 0) {return true;}
+		return false;
 	}
 
-	//	 Implement
+	/**
+	 * boolean isFirst() throws SQLException 
+	 * 
+	 * Retrieves whether the cursor is on the first row of this ResultSet object.
+	 */
 	public boolean isFirst() throws SQLException {
-		throw new UnsupportedOperationException("Our shit is weak");
-		
+		if (cursor == 1) {return true;}
+		return false;
 	}
 
-	//	 Implement
+	/**
+	 * boolean isLast() throws SQLException
+	 * 
+	 * Retrieves whether the cursor is on the last row of this ResultSet object.
+	 */
 	public boolean isLast() throws SQLException {
-		throw new UnsupportedOperationException("Our shit is weak");
-		
+		if (cursor == getRowCount()) {return true;}
+		return false;
 	}
 
-	//	 Implement
+	/**
+	 * boolean last() throws SQLException 
+	 * 
+	 * Moves the cursor to the last row in this ResultSet object.
+	 */
 	public boolean last() throws SQLException {
-		throw new UnsupportedOperationException("Our shit is weak");
-		
+		if (getRowCount() == 0) {return false;}
+		cursor = getRowCount();
+		return true;
 	}
 
-	//	 Implement
-	public void moveToInsertRow() throws SQLException {
-		throw new UnsupportedOperationException("Our shit is weak");
-
-	}
-
-	//	 Implement
+	/**
+	 * boolean next() throws SQLException
+	 * 
+	 * Retrieves whether the cursor is on the last row of this ResultSet object.
+	 */
 	public boolean next() throws SQLException {
-		throw new UnsupportedOperationException("Our shit is weak");
-		
+		cursor++;	
 	}
 
-	//	 Implement
+	/**
+	 * public boolean previous() throws SQLException 
+	 * 
+	 * Moves the cursor to the previous row in this ResultSet object.
+	 */
 	public boolean previous() throws SQLException {
-		throw new UnsupportedOperationException("Our shit is weak");
-		
+		cursor--;
 	}
 	
 	
@@ -219,6 +264,9 @@ public class OodleResultSet
 		throw new UnsupportedOperationException("Our shit is weak");
 	}
 
+	public void moveToInsertRow() throws SQLException {
+		throw new UnsupportedOperationException("Our shit is weak"); }
+	
 	public void afterLast() throws SQLException {
 		throw new UnsupportedOperationException("Our shit is weak");
 	}

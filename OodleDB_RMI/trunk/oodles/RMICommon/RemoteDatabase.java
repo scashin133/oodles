@@ -105,7 +105,7 @@ public interface RemoteDatabase extends Remote {
 	* 
 	* @throws RemoteException to make RMI happy
 	*/
-	public int insert(String tableName, Collection<String> columnNames, Collection<String> values) throws SQLException, RemoteException;
+	public int insert(String tableName, List<String> columnNames, List<String> values) throws SQLException, RemoteException;
 
 
 	/**
@@ -158,10 +158,13 @@ public interface RemoteDatabase extends Remote {
 	
 	
 	/**
+	 * <p>
 	 * Maps to the SHOW TABLES SQL command. Returns a resultset listing the names of all the tables within the database.
+	 * </p>
 	 * 
-	 * Columns Returned:
-	 * - Table: The name of the table
+	 * 
+	 * <strong>Columns Returned:</strong>
+	 * Table: The name of the table
 	 * 
 	 * @thows SQLException
 	 * @throws RemoteException to make RMI happy

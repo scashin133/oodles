@@ -42,7 +42,10 @@ import oodles.RMICommon.RemoteDatabaseServer;
  */
 public class OodleConnection implements Connection {
 	
+	/** The refernce to the remote database server */
 	protected RemoteDatabaseServer databaseServer;
+	
+	/** The reference to the remote database that we're currently using. */
 	protected RemoteDatabase database;
 
 	/** 
@@ -105,7 +108,7 @@ public class OodleConnection implements Connection {
 	
 
 	/**
-	 * Returns the database server that this connection is with.
+	 * Returns the database server that this connection is connected to.
 	 * 
 	 * @return The RemoteDatabaseServer object.
 	 * 
@@ -123,10 +126,27 @@ public class OodleConnection implements Connection {
 	 * @return the RemoteDatabase object for the database currently in use, or null if there is no
 	 * currently selected database.
 	 * 
+	 * @throws SQLException if there is no database currently selected.
+	 * 
 	 * @see oodles.RMICommon.RemoteDatabase
 	 */
-	public RemoteDatabase getDatabase() {
+	public RemoteDatabase getDatabase() throws SQLException {
+		
+		if (database == null) {
+			throw new SQLException("No database currently in use");
+		}
+		
 		return database;
+	}
+	
+	
+	/**
+	 * Returns true if the there is a database selected
+	 * 
+	 * @return True if there is a database selected
+	 */
+	public boolean isDatabaseSelected() {
+		return database != null;
 	}
 	
 	

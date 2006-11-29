@@ -29,7 +29,7 @@ import oodles.RMICommon.*;
  * To specify a security policy, you need to launch the Java VM with a special argument:
  * </p>
  * 
- * <code>-Djava.security.policy=<var>[path to security policy]></var></code>
+ * <code>-Djava.security.policy=<var>[path to security policy]</var></code>
  * 
  * @author mitch
  *

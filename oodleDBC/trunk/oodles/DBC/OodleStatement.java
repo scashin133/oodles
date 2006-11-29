@@ -105,7 +105,7 @@ public class OodleStatement implements Statement {
 	 * 
 	 */
 	protected static final Pattern CREATE_QUERY_PATTERN = 
-		Pattern.compile("create\\s+(database)|(table)\\s+(.*)",
+		Pattern.compile("create\\s+(?:(database)|(table))\\s+(.*)",
 		Pattern.CASE_INSENSITIVE);
 	
 	/**
@@ -121,7 +121,7 @@ public class OodleStatement implements Statement {
 	 * </ol>
 	 */
 	protected static final Pattern SELECT_QUERY_PATTERN = 
-		Pattern.compile("select\\s+(\\*|(?:\\w+(?:\\s*,\\s*\\w+)*))\\s+from\\s+(\\w+)\\s+where\\s+(.*)",
+		Pattern.compile("select\\s+(\\*|(?:\\w+(?:\\s*,\\s*\\w+)*))\\s+from\\s+(\\w+)(?:\\s+where\\s+(.*))?",
 		Pattern.CASE_INSENSITIVE);
 	
 	
@@ -572,13 +572,13 @@ public class OodleStatement implements Statement {
 			String targetType = dropQueryMatcher.group(1).toLowerCase();
 			String targetName = dropQueryMatcher.group(2);
 			
-			if (targetType == "table") {
+			if (targetType.equals("table")) {
 				
 				/* We've got a DROP TABLE query */
 				
 				parentConnection.getDatabase().dropTable(targetName);
 				
-			} else if (targetType == "database") {
+			} else if (targetType.equals("database")) {
 				
 				/* We've got a DROP DATABASE query */
 				
@@ -635,7 +635,7 @@ public class OodleStatement implements Statement {
 			ArrayList<String> valueCollection = new ArrayList<String>();
 			
 			for (String value : valueList.split( COMMA_DELIMITER_PATTERN.pattern() )) {
-				columnNameCollection.add(value);
+				valueCollection.add(value);
 			}
 			
 			parentConnection.getDatabase().insert(tableName, columnNameCollection, valueCollection);
@@ -690,13 +690,13 @@ public class OodleStatement implements Statement {
 			String targetType = showQueryMatcher.group(1).toLowerCase();
 			
 			
-			if (targetType == "tables") {
+			if (targetType.equals("tables")) {
 				
 				/* Execute a SHOW TABLES query */
 				
 				currentResultSet = parentConnection.getDatabase().showTables();
 				
-			} else if (targetType == "databases") {
+			} else if (targetType.equals("databases")) {
 				
 				/* Execute a SHOW DATABASES query */
 				

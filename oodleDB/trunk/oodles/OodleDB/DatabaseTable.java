@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  */
 
-public class DatabaseTable extend DefaultTableModel{
+public class DatabaseTable extends DefaultTableModel{
 	private String name;
 	private TableSchema schema;
 	

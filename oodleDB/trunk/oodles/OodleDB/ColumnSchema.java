@@ -15,7 +15,8 @@ public class ColumnSchema {
 	
 	public ColumnSchema(String name)
 	{
-		name = this.name;
+		this.name = name;
+		this.type = "String";
 	}
 	
 	public String getName(){

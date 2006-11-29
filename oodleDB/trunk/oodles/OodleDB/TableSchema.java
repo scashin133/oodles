@@ -11,6 +11,10 @@ public class TableSchema {
 	private ColumnSchema primaryKey;
 	private ArrayList<ColumnSchema> schema;
 	
+	public TableSchema() {
+		schema = new ArrayList<ColumnSchema>();
+	}
+	
 	public ColumnSchema getPrimaryKey(){
 		return primaryKey;
 	}

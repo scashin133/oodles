@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import oodles.RMICommon.RemoteDatabaseServer;
+import java.util.Vector;
 
 /**
  * File:   OodleDatabaseServer.java
@@ -56,11 +57,18 @@ public class OodleDatabaseServer implements RemoteDatabaseServer {
 	/**
 	 * showDatabases()
 	 * 
-	 * More Info
+	 * Outputs a list of databases.
 	 */
-	
 	public OodleResultSet showDatabases() throws SQLException{
-		return null;
+		OodleResultSet newResultSet = new OodleResultSet("DatabaseNames");
+		for (int i = 0 ; i < databases.size(); i++)
+		{
+			Vector<String> namesOfDatabases = new Vector();
+			String nameOfDB = (databases.get(i)).getName();
+			namesOfDatabases.add(nameOfDB);
+			newResultSet.addRow(namesOfDatabases);
+		}
+		return newResultSet;
 	}
 	
 	/**

@@ -27,8 +27,7 @@ public class SQLExecutor {
 		// The ResultSet is instantiated here in case there
 		// is no query command.
 		ResultSet resultSet = null;
-		//ResultSet resultSet = new OodleResultSet(OodleFaceUtil.getTableName(commands.get(0)));
-
+		
 
 
 
@@ -39,7 +38,8 @@ public class SQLExecutor {
 			System.out.println(s);
 		}
 		System.out.println();
-		/// WAITING FOR WORKING DBC
+		
+		/// TODO WAITING FOR WORKING DBC (Uncomment when ready)
 		/*
 
 		OodleDataSource ods= new OodleDataSource("dbConnectString");
@@ -80,11 +80,15 @@ public class SQLExecutor {
 
 
 
-		 */
-		//ResultSet resultSet;
 
-		//JTable returnTable = myTableBuilder.buildTable(resultSet, OodleFaceUtil.getTableName(commands.get(0)));
+
+		//returnTable = myTableBuilder.buildTable(resultSet, OodleFaceUtil.getTableName(commands.get(0)));
+		*/
+		
+		/// TODO DBCA Comment out this next time
 		returnTable.setName(OodleFaceUtil.getTableName(commands.get(0)));
+		//
+		
 		returnTable.setBorder(new EtchedBorder());
 		returnTable.setSize(100, 100);
 		return returnTable;

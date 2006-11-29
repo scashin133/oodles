@@ -37,6 +37,7 @@ public class OodleFaceUtil {
 
 	public static ArrayList<String> getTables(SQLExecutor sqle){
 		ArrayList<String> tableNames = new ArrayList<String>();
+		///TODO UNCOMMENT WHEN DBC WORKS
 		/*
 		try {
 			ResultSet rs = sqle.getResultSet("SHOW TABLES");
@@ -50,7 +51,8 @@ public class OodleFaceUtil {
 			s.printStackTrace();
 		}
 		 */
-		//TODO REMOVE THIS WHEN THE DBC WORKS
+		
+		//TODO COMMENT-OUT THIS WHEN THE DBC WORKS
 		tableNames.clear();
 		tableNames.add("Table1");
 		tableNames.add("Table2");
@@ -62,6 +64,7 @@ public class OodleFaceUtil {
 
 	public static ArrayList<String> getColumns(SQLExecutor sqle, String tableName){
 		ArrayList<String> columnNames = new ArrayList<String>();
+		// TODO UNCOMMENT WHEN DBC WORKS
 		/*
 		try {
 			ResultSet rs = sqle.getResultSet("SHOW COLUMNS FROM " + tableName);
@@ -75,7 +78,7 @@ public class OodleFaceUtil {
 			s.printStackTrace();
 		}
 		*/
-		//TODO REMOVE THIS WHEN THE DBC WORKS
+		//TODO COMMENT-OUT THIS WHEN THE DBC WORKS
 		columnNames.clear();
 		columnNames.add("Column1");
 		columnNames.add("Column2");

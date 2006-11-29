@@ -98,8 +98,9 @@ public class OodleConnection implements Connection {
 	 * @return A new statement object.
 	 */
 	public Statement createStatement() throws SQLException {
-		// TODO: Implement : /
-		return null;
+		
+		return new OodleStatement(this);
+		
 	}
 	
 

@@ -31,6 +31,8 @@ public class TableEditPanel extends JPanel implements ActionVisualization, Actio
 	}
 	
 	private void initialize(){
+		//TODO this needs to get the table from the database
+		
 		JButton goButton = new JButton("go");
 		goButton.setActionCommand("go");
 		goButton.addActionListener(this);
@@ -39,10 +41,13 @@ public class TableEditPanel extends JPanel implements ActionVisualization, Actio
 	
 	private void displayTable(){
 		this.add(editableTable);
+		editableTable.setName("table1");
 		executeButton.setActionCommand("execute");
 		this.add(executeButton);
 		this.revalidate();
 		this.repaint();
+		// TODO there needs to be add and remove row
+		// buttons
 	}
 	
 	public boolean launch(){
@@ -50,7 +55,7 @@ public class TableEditPanel extends JPanel implements ActionVisualization, Actio
 	}
 	
 	public ArrayList<String> getResult(){
-		return TableEditorSQLCreator.produceSQLToStoreEdit(new JTable(), editableTable);
+		return TableEditorSQLCreator.produceSQLToStoreEdit(new JTable(2,2), editableTable);
 	}
 
 	public JButton getExecuteButton() {

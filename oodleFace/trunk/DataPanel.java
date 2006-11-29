@@ -2,11 +2,15 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.border.EtchedBorder;
+import javax.swing.table.DefaultTableModel;
 
 /*
  * Creator : Sam Archer
@@ -63,7 +67,35 @@ public class DataPanel extends JPanel implements ActionListener{
 			// If the execute button was pressed, give the executionResult
 			// back to the Panel
 			try {
-				actionVisualizationPanel.executionResult(executionListener.executeSQL(actionVisualizationPanel.getResult(), "TableName"));
+				ArrayList<String> commands = new ArrayList<String>();
+				commands = actionVisualizationPanel.getResult();
+				String firstCommand = commands.get(0);
+				Scanner s = new Scanner(firstCommand);
+				// Look for a statement that preceeds a table name
+				while (s.hasNext() && !s.hasNext(Pattern.compile("FROM|TABLE|INTO|ON"))){
+					s.next();
+				}
+				// If the loop exits, there's either table name or
+				// its reached the end of the String
+				if (s.hasNext()){
+					// burn the preceeding token
+					// and take the next as the table name
+					s.next();
+					String tableName = s.next();
+					System.out.println("Table Name: " + tableName);
+					actionVisualizationPanel.executionResult(executionListener.executeSQL(commands, tableName));
+				}
+				
+				// Otherwise, there was no token found, and an error message
+				// needs to be displayed.  Because results are generally
+				// passed as tables, a new errorTable is created to inform the
+				// user
+				else {
+					DefaultTableModel errorModel = new DefaultTableModel(1,1);
+					errorModel.setValueAt("No table name found", 0, 0);
+					JTable errorTable = new JTable(errorModel);
+					actionVisualizationPanel.executionResult(errorTable);
+				}
 			}
 			catch (SQLException e){
 				System.out.println(e.getMessage());

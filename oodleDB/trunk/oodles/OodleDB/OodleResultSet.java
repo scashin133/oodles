@@ -36,6 +36,11 @@ public class OodleResultSet
 	extends DefaultTableModel
 	implements java.sql.ResultSet, ResultSetMetaData, Serializable{
 	
+	public ResultSetMetaData getMetaData() throws SQLException {
+		// We don't really need this so lets just satisfy the interface w/a null cookie
+		return null;
+	}
+
 	/**
 	 * 
 	 */
@@ -141,13 +146,13 @@ public class OodleResultSet
 	 * 
 	 * Retrieves the name of the column at index arg0.  
 	 */
-	public String getColumnName(int arg0) throws SQLException {
+	public String getColumnName(int arg0) {
+		String nameOfColumn = "";
 		if(arg0 > 0 && arg0 <= getColumnCount())
 		{
-			String nameOfColumn = getColumnName(arg0);
-			return nameOfColumn;
+			nameOfColumn = getColumnName(arg0);
 		}
-		throw new SQLException("arg0 in getColumnName is out of bounds.");
+		return nameOfColumn;
 	}
 	
 	/**

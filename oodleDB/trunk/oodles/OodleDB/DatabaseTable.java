@@ -3,6 +3,10 @@
  */
 package oodles.OodleDB;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Vector;
+
+import javax.swing.table.DefaultTableModel;
 
 
 /**
@@ -14,12 +18,11 @@ public class DatabaseTable extends DefaultTableModel{
 	private String name;
 	private TableSchema schema;
 	
-	public DatabaseTable(String name, ArrayList<String> columnNames) {
+	public DatabaseTable(String name, Collection<ColumnSchema> columnNames) {
 		this.name = name;
 		schema = new TableSchema();
-		for (String c : columnNames) {
-			ColumnSchema column = new ColumnSchema(c);
-			schema.addColumn(column);
+		for (ColumnSchema c : columnNames) {
+			schema.addColumn(c);
 		}
 	}
 	
@@ -27,25 +30,25 @@ public class DatabaseTable extends DefaultTableModel{
 		return name;
 	}
 	
-	public void addColumn(ColumnSchema) {
-		schema.addColumn(columnSchema);
+	public void addColumn(ColumnSchema column) {
+		schema.addColumn(column);
 	}
 	
 	public void deleteRow(int rowIndex){
 		
 	}
 	
-	public OodleResultSet query(ConditionList conditions){
-		
+	public OodleResultSet query(ArrayList<String> columnNames, String conditions){
+		return null;
 	}
 	
 	public ArrayList<Integer> findSatisfiedRows(ConditionList conditions) {
 		// step through every row in the table, returning a list of indices for the rows that satisfy the conditionlist
 		ArrayList<Integer> rowIndices = new ArrayList<Integer>();
 		int i = 0;
-		for (Vector row : dataVector) {
+		for (Object row : getDataVector()) {
 			i++;
-			if (rowSatisfiesConditions(row, conditions)) {
+			if (rowSatisfiesConditions((Vector)row, conditions)) {
 				rowIndices.add(i);
 			}
 		}

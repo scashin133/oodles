@@ -4,6 +4,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.sql.*;
 import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -88,7 +89,7 @@ public interface RemoteDatabase extends Remote {
 	* @throws RemoteException to make RMI happy
 	*
 	*/
-	public int update(String tableName, Collection<String> columnNames, Collection<String> newValues, String whereClause) throws SQLException, RemoteException;
+	public int update(String tableName, List<String> columnNames, List<String> newValues, String whereClause) throws SQLException, RemoteException;
 
 	/**
 	* Maps to the INSERT INTO SQL Statement.  The tablename must be a table in the database.  If the list of columnNames is null then the

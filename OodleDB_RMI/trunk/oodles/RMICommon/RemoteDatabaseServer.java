@@ -26,11 +26,15 @@ public interface RemoteDatabaseServer extends Remote {
 	
 	
 	/**
+	 * <p>
 	 * Maps to the SHOW DATABASES SQL statement. Returns a ResultSet containing the row and column information
 	 * about a table.
+	 * </p>
 	 * 
-	 * Columnns Returned:
-	 * - Database: the name of the database
+	 * <strong>Columns Returned:</strong>
+	 * <ul>
+	 *  <li><strong>Database (String)</strong>: the name of the database</li>
+	 * </ul>
 	 * 
 	 * @throws SQLException if a SQL error occurs.
 	 * @throws RemoteException to make RMI happy
